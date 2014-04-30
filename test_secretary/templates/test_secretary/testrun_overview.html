@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+  <h1>{{ testrun }}</h1>
+
+  <h2>TestCases</h2>
+  <ul>
+    {% for testcaserun in testcaseruns %}
+      <li>{{ testcaserun }}</li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

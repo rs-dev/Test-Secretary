@@ -14,7 +14,7 @@
   <h2>Test Runs</h2>
   <ul>
     {% for testrun in testruns %}
-      <li>{{ testrun }}{% if testrun.is_finished %} ({% if testrun.is_success %}success{% else %}failed{% endif %}){% endif %}</li>
+      <li><a href="{% url "testrun_overview" testrun.pk %}">{{ testrun }}</a>{% if testrun.is_finished %} ({% if testrun.is_success %}success{% else %}failed{% endif %}){% endif %}</li>
     {% endfor %}
   </ul>
 
