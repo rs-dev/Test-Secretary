@@ -10,6 +10,7 @@ STATUS = (('NT', 'untested'),
 
 class Application(models.Model):
     name = models.CharField(max_length=50)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -17,12 +18,22 @@ class Application(models.Model):
     class Meta:
         ordering = ['name']
 
+    @property
+    def active_sections(self):
+        return self.testsection_set.filter(active=True)
+
+
 class TestSection(models.Model):
     name = models.CharField(max_length=50)
     app = models.ForeignKey(Application)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return '%s - %s' % (self.app, self.name)
+
+    @property
+    def active_testcases(self):
+        return self.testcase_set.filter(active=True)
 
 
 class TestCase(models.Model):

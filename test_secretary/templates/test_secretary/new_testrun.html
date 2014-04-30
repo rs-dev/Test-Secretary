@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main %}
+  <h1>New TestRun</h1>
+
+  <p>name</p>
+  <p>comment</p>
+  <p>version</p>
+
+  <ul>
+  {% for app in apps %}
+      <li>{{ app.name }}</li>
+      <ul>
+        {% for section in app.active_sections  %}
+          <li>{{ section }}</li>
+          <ul>
+            {% for testcase in section.active_testcases  %}
+              <li>{{ testcase }}</li>
+            {% endfor %}
+          </ul>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  </ul>
+{% endblock %}
