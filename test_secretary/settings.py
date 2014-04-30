@@ -50,6 +50,16 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader'
+)
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'test_secretary', 'templates'),
+)
+
 ROOT_URLCONF = 'test_secretary.urls'
 
 WSGI_APPLICATION = 'test_secretary.wsgi.application'

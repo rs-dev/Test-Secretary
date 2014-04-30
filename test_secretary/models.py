@@ -14,6 +14,9 @@ class Application(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 class TestSection(models.Model):
     name = models.CharField(max_length=50)
     app = models.ForeignKey(Application)
@@ -45,6 +48,18 @@ class TestRun(models.Model):
 
     def __str__(self):
         return '[%s] %s' % (self.date.strftime('%Y-%m-%d %H:%M'), self.name)
+
+    class Meta:
+        get_latest_by = 'date'
+        ordering = ['-date']
+
+    @property
+    def is_finished(self):
+        return self.testcaserun_set.exclude(status='NT').count() == 0
+
+    @property
+    def is_success(self):
+        return self.testcaserun_set.filter(status='NOK').count() == 0
 
 
 class TestCaseRun(models.Model):
