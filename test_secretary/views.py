@@ -10,6 +10,13 @@ def home(request):
     return render(request, 'test_secretary/overview.html', d)
 
 
+def app_overview(request, aid):
+    d = {}
+    app = Application.objects.get(pk=aid)
+    d['app'] = app
+    return render(request, 'test_secretary/app_overview.html', d)
+
+
 def testrun_overview(request, rid):
     d = {}
     testrun = TestRun.objects.get(pk=rid)

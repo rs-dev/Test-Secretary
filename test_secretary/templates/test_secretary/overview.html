@@ -7,7 +7,7 @@
   <h2>Applications</h2>
   <ul>
     {% for app in apps %}
-      <li>{{ app.name }}</li>
+      <li><a href="{% url 'app_overview' app.pk %}">{{ app.name }}</a></li>
     {% endfor %}
   </ul>
 

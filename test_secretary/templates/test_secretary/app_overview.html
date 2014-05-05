@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+  <h1>{{ app }}</h1>
+
+  <h2>Sections</h2>
+  {% for section in app.testsection_set.all %}
+    <h3>{{ section.name }}</h3>
+    {% if section.testcase_set.count %}
+      <table class="table table-bordered table-striped">
+        <thead>
+          <th>#</th>
+          <th>name</th>
+          <th>description</th>
+          <th>preconditions</th>
+        </thead>
+        <tbody>
+          {% for testcase in section.testcase_set.all %}
+            <tr>
+              <td>{{ testcase.number }}</td>
+              <td>{{ testcase.name }}</td>
+              <td>{{ testcase.description }}</td>
+              <td>
+                {% if testcase.preconditions.count %}
+                  <ul>
+                    {% for precondition in testcase.preconditions.all %}
+                      <li><a href"#{{ precondition.pk }}">{{ precondition.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="alert alert-info">
+        No testcases in this sections
+      </div>
+    {% endif %}
+  {% empty %}
+    <div class="alert alert-info">
+      No sections in this app
+    </div>
+  {% endfor %}
+
+{% endblock %}
