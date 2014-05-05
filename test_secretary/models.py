@@ -42,7 +42,8 @@ class TestCase(models.Model):
     section = models.ForeignKey(TestSection)
     active = models.BooleanField(default=True)
     description = models.TextField(null=True, blank=True)
-    precondition = models.TextField(null=True, blank=True)
+    preconditions = models.ManyToManyField('self')
+    precondition_comment = models.TextField(null=True, blank=True)
     action = models.TextField(null=True, blank=True)
     expected = models.TextField(null=True, blank=True)
 
