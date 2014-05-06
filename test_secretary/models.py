@@ -73,7 +73,7 @@ class TestRun(models.Model):
 
     @property
     def is_finished(self):
-        return self.testcaserun_set.exclude(status='NT').count() == 0
+        return self.testcaserun_set.filter(status='NT').count() == 0
 
     @property
     def is_success(self):
