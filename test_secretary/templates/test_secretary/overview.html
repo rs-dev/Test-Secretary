@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block main %}
 
   <h1>Overview</h1>
@@ -17,5 +19,6 @@
       <li><a href="{% url "testrun_overview" testrun.pk %}">{{ testrun }}</a>{% if testrun.is_finished %} ({% if testrun.is_success %}success{% else %}failed{% endif %}){% endif %}</li>
     {% endfor %}
   </ul>
+  <p><a class="btn btn-primary" style="margin: 5px" href={% url "new_testrun" %}>{% trans "New TestRun" %}</a></p>
 
 {% endblock %}
