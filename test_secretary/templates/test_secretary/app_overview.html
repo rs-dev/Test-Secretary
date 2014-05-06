@@ -5,9 +5,9 @@
   <h1>{{ app }}</h1>
 
   <h2>Sections</h2>
-  {% for section in app.testsection_set.all %}
+  {% for section in app.active_sections %}
     <h3>{{ section.name }}</h3>
-    {% if section.testcase_set.count %}
+    {% if section.active_testcases.count %}
       <table class="table table-bordered table-striped">
         <thead>
           <th>#</th>
@@ -16,7 +16,7 @@
           <th>preconditions</th>
         </thead>
         <tbody>
-          {% for testcase in section.testcase_set.all %}
+          {% for testcase in section.active_testcases %}
             <tr>
               <td>{{ testcase.number }}</td>
               <td>{{ testcase.name }}</td>

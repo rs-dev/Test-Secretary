@@ -1,25 +1,67 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+  function set_testcases(cls, state) {
+    $('input.'+cls).prop("checked", state);
+  }
+{% endblock %}
+
 {% block main %}
   <h1>New TestRun</h1>
 
-  <p>name</p>
-  <p>comment</p>
-  <p>version</p>
+  {% if errmsg %}
+    <div class="alert alert-warning">
+      {{ errmsg }}
+    </div>
+  {% endif %}
 
-  <ul>
-  {% for app in apps %}
-      <li>{{ app.name }}</li>
-      <ul>
-        {% for section in app.active_sections  %}
-          <li>{{ section }}</li>
-          <ul>
-            {% for testcase in section.active_testcases  %}
-              <li>{{ testcase }}</li>
-            {% endfor %}
-          </ul>
-        {% endfor %}
-      </ul>
+  <form method='POST' action=''>
+    {% csrf_token %}
+    <p>
+      <label for='name'>Name</label>
+      <input id='name'></input>
+    </p>
+    <p>
+      <label for='comment'>Comment</label>
+      <input id='comment'></input>
+    </p>
+    <p>
+      <label for='version'>Version</label>
+      <input id='version'></input>
+    </p>
+
+    {% for app in apps %}
+      {% if app.active_sections.count %}
+        <h2>{{ app.name }}</h2>
+        <div class='well' id='appblock{{ app.pk }}'>
+          <span>
+            select
+            <a href='#toggle_app{{ app.pk }}' onClick="set_testcases('app{{ app.pk }}', true);">all</a>
+            /
+            <a href='#toggle_app{{ app.pk }}' onClick="set_testcases('app{{ app.pk }}', false);">none</a>
+          </span>
+          {% for section in app.active_sections %}
+            {% if section.active_testcases.count %}
+              <h3>{{ section.name }}</h3>
+              <div id='sectionblock{{ section.pk }}'>
+                <span>
+                  select
+                  <a href='#toggle_section{{ section.pk }}' onClick="set_testcases('section{{ section.pk }}', true);">all</a>
+                  /
+                  <a href='#toggle_section{{ section.pk }}' onClick="set_testcases('section{{ section.pk }}', false);">none</a>
+                </span>
+                {% for testcase in section.active_testcases %}
+                  <p title='{{ testcase.description }}'>
+                    <input type=checkbox name='testcase{{ testcase.pk }}' value='1' class="app{{ app.pk }} section{{ section.pk }}"></input>
+                    <label for='testcase{{ testcase.pk }}'>{{ testcase.name }}</label>
+                  </p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
     {% endfor %}
-  </ul>
+    <input type='submit'/>
+  </form>
 {% endblock %}
