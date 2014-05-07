@@ -27,6 +27,7 @@ class TestSection(models.Model):
     name = models.CharField(max_length=50)
     app = models.ForeignKey(Application)
     active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return '%s - %s' % (self.app, self.name)
@@ -37,6 +38,9 @@ class TestSection(models.Model):
 
     class Meta:
         unique_together = ('name', 'app')
+
+    class Meta:
+        ordering = ('app', 'order', 'name')
 
 
 class TestCase(models.Model):
@@ -90,4 +94,4 @@ class TestCaseRun(models.Model):
         return '%s: %s' % (self.testrun, self.testcase)
 
     class Meta:
-        ordering = ('testcase__section__app__name', 'testcase__section__name', 'testcase__number')
+        ordering = ('testcase__section__app__name', 'testcase__section__order', 'testcase__section__name', 'testcase__number')
