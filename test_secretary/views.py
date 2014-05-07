@@ -39,9 +39,6 @@ def new_testrun(request):
         name = request.POST.get('name', 'TestRun %s'% datetime.now().strftime('%c'))
         comment = request.POST.get('comment', None)
         version = request.POST.get('version', 'undefined')
-        # extract ids from post elements
-        for elem in request.POST.keys():
-            print(elem)
         testcase_ids = [TCREGEX.match(elem).groupdict()['tcid'] for elem in request.POST if TCREGEX.match(elem)]
         # get TestCases from ids
         testcases = [TestCase.objects.get(pk=tcid) for tcid in testcase_ids]
