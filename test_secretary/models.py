@@ -45,7 +45,7 @@ class TestCase(models.Model):
     section = models.ForeignKey(TestSection)
     active = models.BooleanField(default=True)
     description = models.TextField(null=True, blank=True)
-    preconditions = models.ManyToManyField('self')
+    preconditions = models.ManyToManyField('self', null=True, blank=True)
     precondition_comment = models.TextField(null=True, blank=True)
     action = models.TextField(null=True, blank=True)
     expected = models.TextField(null=True, blank=True)
@@ -88,3 +88,6 @@ class TestCaseRun(models.Model):
 
     def __str__(self):
         return '%s: %s' % (self.testrun, self.testcase)
+
+    class Meta:
+        ordering = ('testcase__section__app__name', 'testcase__section__name', 'testcase__number')

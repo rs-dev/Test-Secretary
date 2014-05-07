@@ -1,0 +1,51 @@
+{% regroup testcaseruns by testcase.section.app as testcaseruns_group_app %}
+
+{% for testcaserun_app in testcaseruns_group_app %}
+  <h2>{{ testcaserun_app.grouper }}</h2>
+  {% regroup testcaserun_app.list by testcase.section as testcaseruns_group_section %}
+  {% for testcaserun_section in testcaseruns_group_section %}
+    <h3>{{ testcaserun_section.grouper.name }}</h3>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Testcase</th>
+          <th>Description</th>
+          <th>Preconditions</th>
+          <th>Action</th>
+          <th>Expected</th>
+          <th>Tester comment</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <!--<tfoot>
+        <tr>
+          <td>no footer yet</td>
+          <td>tbd</td>
+        </tr>
+      </tfoot>-->
+      <tbody>
+        {% for testcaserun in testcaserun_section.list %}
+          <tr>
+            <td>{{ testcaserun.testcase.number }}</td>
+            <td>{{ testcaserun.testcase.name }}</td>
+            <td>{{ testcaserun.testcase.description|default:"" }}</td>
+            <td>
+              {% if testcaserun.testcase.preconditions.count %}
+                <ul>
+                  {% for precondition in testcaserun.testcase.preconditions.all %}
+                    <li><a href"#{{ precondition.pk }}">{{ precondition.name }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </td>
+            <td>{{ testcaserun.testcase.action|default:"" }}</td>
+            <td>{{ testcaserun.testcase.expected|default:"" }}</td>
+            <td>{{ testcaserun.comment|default:"" }}</td>
+            <td>{{ testcaserun.get_status_display }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
+{% endfor %}

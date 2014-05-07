@@ -16,14 +16,23 @@ class TestCaseAdmin(admin.ModelAdmin):
     list_filter = ('section', 'active', 'section__app')
 
 
-class TestRunAdmin(admin.ModelAdmin):
-    list_display = ('name', 'version', 'date')
-    list_filter = ('version', 'date')
+class TestCaseRunInline(admin.TabularInline):
+    model = TestCaseRun
 
 
 class TestCaseRunAdmin(admin.ModelAdmin):
     list_display = ('testcase', 'testrun', 'status')
     list_filter = ('testcase', 'testrun', 'status', 'testrun__date')
+
+
+class TestRunAdmin(admin.ModelAdmin):
+    list_display = ('name', 'version', 'date')
+    list_filter = ('version', 'date')
+
+    inlines = [
+        TestCaseRunInline,
+    ]
+
 
 admin.site.register(Application, ApplicationAdmin)
 admin.site.register(TestSection, TestSectionAdmin)
