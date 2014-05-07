@@ -6,19 +6,36 @@
 
   <h1>Overview</h1>
 
-  <h2>Applications</h2>
-  <ul>
-    {% for app in apps %}
-      <li><a href="{% url 'app_overview' app.pk %}">{{ app.name }}</a></li>
-    {% endfor %}
-  </ul>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Applications</h3>
+    </div>
+    <div class="panel-body">
+     <ul>
+       {% for app in apps %}
+          <li><a href="{% url 'app_overview' app.pk %}">{{ app.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 
-  <h2>Test Runs</h2>
-  <ul>
-    {% for testrun in testruns %}
-      <li><a href="{% url "testrun_overview" testrun.pk %}">{{ testrun }}</a>{% if testrun.is_finished %} ({% if testrun.is_success %}success{% else %}failed{% endif %}){% endif %}</li>
-    {% endfor %}
-  </ul>
-  <p><a class="btn btn-primary" style="margin: 5px" href={% url "new_testrun" %}>{% trans "New TestRun" %}</a></p>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Test Runs</h3>
+    </div>
+    <div class="panel-body">
+      <ul>
+        {% for testrun in testruns %}
+          <li><a href="{% url "testrun_overview" testrun.pk %}">{{ testrun }}</a>{% if testrun.is_finished %} ({% if testrun.is_success %}success{% else %}failed{% endif %}){% endif %}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <p>
+    <a class="btn btn-primary" style="margin: 5px" href={% url "new_testrun" %}>
+      {% trans "New TestRun" %}
+    </a>
+  </p>
 
 {% endblock %}
