@@ -45,7 +45,7 @@ class TestSection(models.Model):
 
 class TestCase(models.Model):
     number = models.PositiveIntegerField(null=True, blank=True)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     section = models.ForeignKey(TestSection)
     active = models.BooleanField(default=True)
     description = models.TextField(null=True, blank=True)
@@ -56,9 +56,6 @@ class TestCase(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.section, self.name)
-
-    class Meta:
-        unique_together = ('number', 'section')
 
 
 class TestRun(models.Model):

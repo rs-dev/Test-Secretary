@@ -31,7 +31,7 @@
           <tr>
             <td style="width: 3em;">{{ testcaserun.testcase.number }}</td>
             <td style="width: 15%">{{ testcaserun.testcase.name }}</td>
-            <td>{{ testcaserun.testcase.description|default:"" }}</td>
+            <td>{{ testcaserun.testcase.description|default:""|linebreaksbr }}</td>
             <td style="width: 15%">
               {% if testcaserun.testcase.preconditions.count %}
                 <ul>
