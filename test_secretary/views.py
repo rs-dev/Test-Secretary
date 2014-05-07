@@ -2,6 +2,8 @@ import re
 from datetime import datetime, date
 
 from django.shortcuts import render
+from django.http.response import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 from .models import *
 
@@ -51,6 +53,7 @@ def new_testrun(request):
             for testcase in testcases:
                 tcr = TestCaseRun(testcase=testcase, testrun=testrun)
                 tcr.save()
+            return HttpResponseRedirect(reverse('testrun_overview', kwargs={'rid': testrun.pk}))
         else:
             d['errmsg'] = 'No testcases selected'
 
