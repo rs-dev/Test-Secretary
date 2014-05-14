@@ -29,9 +29,9 @@ class TestRunAdmin(admin.ModelAdmin):
     list_display = ('name', 'version', 'date')
     list_filter = ('version', 'date')
 
-    inlines = [
-        TestCaseRunInline,
-    ]
+#    inlines = [
+#        TestCaseRunInline,
+#    ]
 
 
 admin.site.register(Application, ApplicationAdmin)
