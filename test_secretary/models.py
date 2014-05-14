@@ -5,7 +5,7 @@ from django.db import models
 STATUS = (('NT', 'untested'),
           ('OK', 'success'),
           ('NOK', 'failed'),
-          ('DN', 'decicion needed'))
+          ('DN', 'decision needed'))
 
 
 class Application(models.Model):
