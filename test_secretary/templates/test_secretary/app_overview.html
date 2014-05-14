@@ -25,8 +25,8 @@
               <td>
                 {% if testcase.preconditions.count %}
                   <ul>
-                    {% for precondition in testcase.preconditions.all %}
-                      <li><a href"#{{ precondition.pk }}">{{ precondition.name }}</a></li>
+                    {% for precondition in testcase.precondition_set.all %}
+                      <li><a href"#{{ precondition.pk }}">{{ precondition }}</a></li>
                     {% endfor %}
                   </ul>
                 {% endif %}
