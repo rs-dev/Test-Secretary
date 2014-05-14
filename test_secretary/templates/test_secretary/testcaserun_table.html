@@ -44,7 +44,11 @@
             <td style="width: 15%">{{ testcaserun.testcase.action|default:"" }}</td>
             <td style="width: 15%">{{ testcaserun.testcase.expected|default:"" }}</td>
             <td style="width: 10%">{{ testcaserun.comment|default:"" }}</td>
-            <td style="width: 6em;">{{ testcaserun.get_status_display }}</td>
+            <td style="width: 6em;">
+              <a href="{% url 'edit_testcaserun' testcaserun.pk %}">
+                {{ testcaserun.get_status_display }}
+              </a>
+            </td>
           </tr>
         {% endfor %}
       </tbody>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block main %}
+  <h2>{{ testcaserun.testrun }}</h2>
+  <h3>{{ testcaserun.testcase }}</h3>
+
+  {% if saved %}
+    <div class="alert alert-success">
+      {% trans "TestCaseRun saved" %}
+    </div>
+  {% endif %}
+
+  {% if testcaserun_form.errors %}
+    <div class="alert alert-danger">
+      {{ testcaserun_form.errors }}
+    </div>
+  {% endif %}
+
+  <form method=POST action="{% url 'edit_testcaserun' testcaserun.pk %}">
+    {% csrf_token %}
+    {{ testcaserun_form }}
+    <input type="submit" value="Save" class="btn btn-primary"></input>
+  </form>
+{% endblock %}

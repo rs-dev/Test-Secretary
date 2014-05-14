@@ -1,11 +1,12 @@
 import re
 from datetime import datetime, date
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http.response import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from .models import *
+from .forms import TestCaseRunForm
 
 
 def home(request):
@@ -57,3 +58,18 @@ def new_testrun(request):
     d['apps'] = Application.objects.filter(active=True)
 
     return render(request, 'test_secretary/new_testrun.html', d)
+
+def edit_testcaserun(request, tcrid):
+    d = {'saved': False}
+    testcaserun = get_object_or_404(TestCaseRun, pk=tcrid)
+    d['testcaserun'] = testcaserun
+    if request.method == 'POST':
+        testcaserun_form = TestCaseRunForm(request.POST, instance=testcaserun)
+        if testcaserun_form.is_valid():
+            testcaserun_form.save()
+            d['saved'] = True
+    else:
+        testcaserun_form = TestCaseRunForm(instance=testcaserun)
+
+    d['testcaserun_form'] = testcaserun_form
+    return render(request, 'test_secretary/edit_testcaserun.html', d)
