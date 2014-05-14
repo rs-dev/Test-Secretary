@@ -8,13 +8,15 @@
   <h3>{{ testcaserun.testcase }}</h3>
 
   {% if saved %}
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       {% trans "TestCaseRun saved" %}
     </div>
   {% endif %}
 
   {% if testcaserun_form.errors %}
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       {{ testcaserun_form.errors }}
     </div>
   {% endif %}
