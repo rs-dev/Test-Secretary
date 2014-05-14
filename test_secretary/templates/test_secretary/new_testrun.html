@@ -26,7 +26,7 @@
     </div>
   {% endif %}
 
-  <form method='POST' action=''>
+  <form method='POST' action='{% url "new_testrun" %}'>
     {% csrf_token %}
 
     <div class="panel panel-default">
