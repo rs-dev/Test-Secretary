@@ -28,7 +28,18 @@
     <div class="panel-body">
       <ul>
         {% for testrun in testruns %}
-          <li><a href="{% url "testrun_overview" testrun.pk %}">{{ testrun }}</a>{% if testrun.is_finished %} ({% if testrun.is_success %}success{% else %}failed{% endif %}){% endif %}</li>
+          <li>
+            <a href="{% url "testrun_overview" testrun.pk %}">{{ testrun }}</a>
+            {% if testrun.is_finished %}
+              {% if testrun.is_success %}
+                <span class="label label-success">success</span>
+              {% else %}
+                <span class="label label-danger">failed</span>
+              {% endif %}
+            {% else %}
+              <span class="label label-info">in progress</span>
+            {% endif %}
+          </li>
         {% empty %}
             <div class="alert alert-info">No testruns</div>
         {% endfor %}
