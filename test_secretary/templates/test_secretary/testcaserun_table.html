@@ -16,7 +16,7 @@
           <th>{% trans "Preconditions" %}</th>
           <th>{% trans "Action" %}</th>
           <th>{% trans "Expected" %}</th>
-          <th>{% trans "Tester comment" %}</th>
+          <!--<th>{% trans "Tester comment" %}</th>-->
           <th>{% trans "Status" %}</th>
         </tr>
       </thead>
@@ -41,12 +41,21 @@
                 </ul>
               {% endif %}
             </td>
-            <td style="width: 15%">{{ testcaserun.testcase.action|default:"" }}</td>
-            <td style="width: 15%">{{ testcaserun.testcase.expected|default:"" }}</td>
-            <td style="width: 10%">{{ testcaserun.comment|default:"" }}</td>
-            <td style="width: 6em;">
+            <td style="width: 15%">{{ testcaserun.testcase.action|default:""|linebreaksbr }}</td>
+            <td style="width: 15%">{{ testcaserun.testcase.expected|default:""|linebreaksbr }}</td>
+            <!--<td style="width: 10%">{{
+                testcaserun.comment|default:""|linebreaksbr }}</td>-->
+            <td style="width: 6em;" title="{{ testcaserun.comment|default:"" }}">
               <a href="{% url 'edit_testcaserun' testcaserun.pk %}">
-                {{ testcaserun.get_status_display }}
+                {% if testcaserun.status == 'OK' %}
+                  <span class="label label-success">{{ testcaserun.get_status_display }}</span>
+                {% elif testcaserun.status == 'NOK' %}
+                  <span class="label label-danger">{{ testcaserun.get_status_display }}</span>
+                {% elif testcaserun.status == 'NT' %}
+                  <span class="label label-default">{{ testcaserun.get_status_display }}</span>
+                {% elif testcaserun.status == 'DN' %}
+                  <span class="label label-info">{{ testcaserun.get_status_display }}</span>
+                {% endif %}
               </a>
             </td>
           </tr>
