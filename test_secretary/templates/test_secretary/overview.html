@@ -14,6 +14,8 @@
      <ul>
        {% for app in apps %}
           <li><a href="{% url 'app_overview' app.pk %}">{{ app.name }}</a></li>
+        {% empty %}
+            <div class="alert alert-info">No apps</div>
         {% endfor %}
       </ul>
     </div>
@@ -27,15 +29,15 @@
       <ul>
         {% for testrun in testruns %}
           <li><a href="{% url "testrun_overview" testrun.pk %}">{{ testrun }}</a>{% if testrun.is_finished %} ({% if testrun.is_success %}success{% else %}failed{% endif %}){% endif %}</li>
+        {% empty %}
+            <div class="alert alert-info">No testruns</div>
         {% endfor %}
       </ul>
+      <p>
+          <a class="btn btn-primary" style="margin: 5px" href={% url "new_testrun" %}>
+          {% trans "New TestRun" %}
+          </a>
+      </p>
     </div>
   </div>
-
-  <p>
-    <a class="btn btn-primary" style="margin: 5px" href={% url "new_testrun" %}>
-      {% trans "New TestRun" %}
-    </a>
-  </p>
-
 {% endblock %}
