@@ -56,6 +56,10 @@ class TestCase(models.Model):
     def __str__(self):
         return '%s - %s' % (self.section, self.name)
 
+    class Meta:
+        get_latest_by = 'pk'
+        ordering = ('section', 'number', 'name')
+
 
 class Precondition(models.Model):
     testcase = models.ForeignKey(TestCase, related_name='from_testcase')
