@@ -1,0 +1,6 @@
+{% extends "test_secretary/edit_testcaserun.html" %}
+
+{% load i18n %}
+{% load static %}
+
+<a href="{% url 'testrun_overview' testcaserun.testrun.pk %}" class="btn btn-info">TestRun</a>

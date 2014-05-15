@@ -21,10 +21,14 @@
     </div>
   {% endif %}
 
-  <form role="form" method=POST action="{% url 'edit_testcaserun' testcaserun.pk %}">
+  <form role="form" method=POST action="">
     {% csrf_token %}
     {{ testcaserun_form }}
-    <input type="submit" value="Save" class="btn btn-primary form-element"></input>
+    <input type="submit" value="Save" class="btn btn-success form-element"></input>
+    {% block form_buttons_bottom %}{% endblock %}
   </form>
-  <a href="{% url 'testrun_overview' testcaserun.testrun.pk %}" class="btn btn-info">TestRun</a>
+
+  {% block bottom %}
+    <a href="{% url 'testrun_overview' testcaserun.testrun.pk %}" class="btn btn-info">TestRun</a>
+  {% endblock %}
 {% endblock %}

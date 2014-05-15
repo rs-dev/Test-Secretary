@@ -1,0 +1,19 @@
+{% extends "test_secretary/edit_testcaserun.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block form_buttons_bottom %}
+  {% if elemno > 1 %}
+    <a href="{% url 'edit_testcaserun_multiple' testcaserun.testrun.pk elemno|add:-1 %}" class="btn btn-info form-element">Previous</a>
+  {% else %}
+    <a href="" class="btn btn-info form-element" disabled="disabled">Previous</a>
+  {% endif %}
+  {% if not is_last %}
+    <a href="{% url 'edit_testcaserun_multiple' testcaserun.testrun.pk elemno|add:1 %}" class="btn btn-primary form-element">Next</a>
+  {% else %}
+    <a href="" class="btn btn-primary form-element" disabled="disabled">Next</a>
+  {% endif %}
+{% endblock %}
+
+<a href="{% url 'testrun_overview' testcaserun.testrun.pk %}" class="btn btn-info">TestRun</a>

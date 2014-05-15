@@ -59,10 +59,13 @@ def new_testrun(request):
 
     return render(request, 'test_secretary/new_testrun.html', d)
 
-def edit_testcaserun(request, tcrid):
+
+def edit_testcaserun_single(request, tcrid):
     d = {'saved': False}
+
     testcaserun = get_object_or_404(TestCaseRun, pk=tcrid)
     d['testcaserun'] = testcaserun
+
     if request.method == 'POST':
         testcaserun_form = TestCaseRunForm(request.POST, instance=testcaserun)
         if testcaserun_form.is_valid():
@@ -72,4 +75,35 @@ def edit_testcaserun(request, tcrid):
         testcaserun_form = TestCaseRunForm(instance=testcaserun)
 
     d['testcaserun_form'] = testcaserun_form
-    return render(request, 'test_secretary/edit_testcaserun.html', d)
+    return render(request, 'test_secretary/edit_testcaserun_single.html', d)
+
+
+def edit_testcaserun(request, trid, elemno):
+    d = {'saved': False}
+    elemno = int(elemno)
+    d['elemno'] = elemno
+
+    testrun = get_object_or_404(TestRun, pk=trid)
+    testcaseruns = TestCaseRun.objects.filter(testrun=testrun)
+
+    tcr_count = testcaseruns.count()
+    if elemno < tcr_count:
+        testcaserun = testcaseruns[elemno]
+    else:
+        testcaserun = testcaseruns[tcr_count-1]
+        d['elemno'] = tcr_count-1
+    d['testcaserun'] = testcaserun
+
+    is_last = elemno >= tcr_count-1
+    d['is_last'] = is_last
+
+    if request.method == 'POST':
+        testcaserun_form = TestCaseRunForm(request.POST, instance=testcaserun)
+        if testcaserun_form.is_valid():
+            testcaserun_form.save()
+            d['saved'] = True
+    else:
+        testcaserun_form = TestCaseRunForm(instance=testcaserun)
+
+    d['testcaserun_form'] = testcaserun_form
+    return render(request, 'test_secretary/edit_testcaserun_multiple.html', d)

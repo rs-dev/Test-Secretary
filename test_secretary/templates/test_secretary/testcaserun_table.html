@@ -46,7 +46,7 @@
             <!--<td style="width: 10%">{{
                 testcaserun.comment|default:""|linebreaksbr }}</td>-->
             <td style="width: 6em;" title="{{ testcaserun.comment|default:"" }}">
-              <a href="{% url 'edit_testcaserun' testcaserun.pk %}">
+              <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
                 {% if testcaserun.status == 'OK' %}
                   <span class="label label-success">{{ testcaserun.get_status_display }}</span>
                 {% elif testcaserun.status == 'NOK' %}
