@@ -3,11 +3,11 @@ from .models import *
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('order', 'name',)
 
 
 class TestSectionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'app')
+    list_display = ('order', 'name', 'app')
     list_filter = ('app',)
 
 
