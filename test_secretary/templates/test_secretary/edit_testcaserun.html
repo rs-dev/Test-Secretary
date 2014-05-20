@@ -24,11 +24,11 @@
   <div class="well">
     <dl class="dl-horizontal">
       <dt>{% trans 'Description' %}</dt>
-      <dd>{{ testcaserun.testcase.description|linebreaksbr }}</dd>
+      <dd>{{ testcaserun.testcase.description|linebreaksbr|default:'-' }}</dd>
       <dt>{% trans 'Action' %}</dt>
-      <dd>{{ testcaserun.testcase.action|linebreaksbr }}</dd>
+      <dd>{{ testcaserun.testcase.action|linebreaksbr|default:'-' }}</dd>
       <dt>{% trans 'Expected' %}</dt>
-      <dd> {{ testcaserun.testcase.expected|linebreaksbr }}</dd>
+      <dd>{{ testcaserun.testcase.expected|linebreaksbr|default:'-' }}</dd>
     </dl>
   </div>
 
