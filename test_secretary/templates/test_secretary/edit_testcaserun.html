@@ -4,9 +4,6 @@
 {% load static %}
 
 {% block main %}
-  <h2>{{ testcaserun.testrun }}</h2>
-  <h3>{{ testcaserun.testcase }}</h3>
-
   {% if saved %}
     <div class="alert alert-success alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -20,6 +17,20 @@
       {{ testcaserun_form.errors }}
     </div>
   {% endif %}
+
+  <h2>{{ testcaserun.testrun }}</h2>
+  <h3>{{ testcaserun.testcase }}</h3>
+
+  <div class="well">
+    <dl class="dl-horizontal">
+      <dt>{% trans 'Description' %}</dt>
+      <dd>{{ testcaserun.testcase.description|linebreaksbr }}</dd>
+      <dt>{% trans 'Action' %}</dt>
+      <dd>{{ testcaserun.testcase.action|linebreaksbr }}</dd>
+      <dt>{% trans 'Expected' %}</dt>
+      <dd> {{ testcaserun.testcase.expected|linebreaksbr }}</dd>
+    </dl>
+  </div>
 
   <form role="form" method=POST action="">
     {% csrf_token %}
