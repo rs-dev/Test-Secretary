@@ -14,6 +14,7 @@ class TestSectionAdmin(admin.ModelAdmin):
 class TestCaseAdmin(admin.ModelAdmin):
     list_display = ('number', 'name', 'section', 'active')
     list_filter = ('section', 'active', 'section__app')
+    search_fields = ('name', 'description', 'action', 'expected')
 
 
 class TestCaseRunInline(admin.TabularInline):
