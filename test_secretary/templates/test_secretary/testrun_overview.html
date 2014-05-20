@@ -8,7 +8,10 @@
   </h1>
   {% if not testrun.is_finished %}
     <a href="{% url 'edit_testcaserun_multiple' testrun.pk 0 %}">
-      <span class="label label-info" style="vertical-align:top;">Run Test</span>
+      <span class="label label-primary" style="vertical-align:top;">Run Test</span>
+    </a>
+    <a href="{{ testrun.get_admin_url }}">
+      <span class="label label-primary" style="vertical-align:top;">Edit</span>
     </a>
   {% endif %}
 

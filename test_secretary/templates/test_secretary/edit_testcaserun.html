@@ -19,17 +19,24 @@
   {% endif %}
 
   <h2>{{ testcaserun.testrun }}</h2>
-  <h3>{{ testcaserun.testcase }}</h3>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <strong>{{ testcaserun.testcase }}</strong>
+      <a href="{{ testcaserun.testcase.get_admin_url }}">
+        <span class="label label-primary" style="vertical-align:top;">Edit</span>
+      </a>
+    </div>
 
-  <div class="well">
-    <dl class="dl-horizontal">
-      <dt>{% trans 'Description' %}</dt>
-      <dd>{{ testcaserun.testcase.description|linebreaksbr|default:'-' }}</dd>
-      <dt>{% trans 'Action' %}</dt>
-      <dd>{{ testcaserun.testcase.action|linebreaksbr|default:'-' }}</dd>
-      <dt>{% trans 'Expected' %}</dt>
-      <dd>{{ testcaserun.testcase.expected|linebreaksbr|default:'-' }}</dd>
-    </dl>
+    <div class="panel-body">
+      <dl class="dl-horizontal">
+        <dt>{% trans 'Description' %}</dt>
+        <dd>{{ testcaserun.testcase.description|linebreaksbr|default:'-' }}</dd>
+        <dt>{% trans 'Action' %}</dt>
+        <dd>{{ testcaserun.testcase.action|linebreaksbr|default:'-' }}</dd>
+        <dt>{% trans 'Expected' %}</dt>
+        <dd>{{ testcaserun.testcase.expected|linebreaksbr|default:'-' }}</dd>
+      </dl>
+    </div>
   </div>
 
   <form role="form" method=POST action="">
