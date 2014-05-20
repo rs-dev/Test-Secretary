@@ -23,7 +23,7 @@ class TestCaseRunInline(admin.TabularInline):
 
 class TestCaseRunAdmin(admin.ModelAdmin):
     list_display = ('testcase', 'testrun', 'status')
-    list_filter = ('testcase', 'testrun', 'status', 'testrun__date')
+    list_filter = ('testcase__section', 'testrun', 'status', 'testrun__date')
 
 
 class TestRunAdmin(admin.ModelAdmin):
