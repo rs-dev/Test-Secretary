@@ -3,8 +3,14 @@
 {% load i18n %}
 
 {% block main %}
-
-  <h1>{{ testrun }}</h1>
+  <h1 style="display: inline;">
+    {{ testrun }}
+  </h1>
+  {% if not testrun.is_finished %}
+    <a href="{% url 'edit_testcaserun_multiple' testrun.pk 0 %}">
+      <span class="label label-info" style="vertical-align:top;">Run Test</span>
+    </a>
+  {% endif %}
 
   {% include "test_secretary/testcaserun_table.html" %}
 
