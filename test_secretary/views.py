@@ -2,7 +2,7 @@ import re
 from datetime import datetime, date
 
 from django.shortcuts import render, get_object_or_404
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
 from .models import *
@@ -107,3 +107,10 @@ def edit_testcaserun(request, trid, elemno):
 
     d['testcaserun_form'] = testcaserun_form
     return render(request, 'test_secretary/edit_testcaserun_multiple.html', d)
+
+def set_testcaserun_status(request, tcrid, status):
+    testcaserun = get_object_or_404(TestCaseRun, pk=tcrid)
+    if status in list(zip(*STATUS))[0]:
+        testcaserun.status = status
+        testcaserun.save()
+    return HttpResponse('')

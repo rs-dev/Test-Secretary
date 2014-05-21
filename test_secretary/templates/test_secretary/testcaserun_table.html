@@ -1,5 +1,7 @@
 {% load i18n %}
 
+{% include 'test_secretary/testcaserun_table.js' %}
+
 {% regroup testcaseruns by testcase.section.app as testcaseruns_group_app %}
 
 {% for testcaserun_app in testcaseruns_group_app %}
@@ -30,7 +32,6 @@
           <th>{% trans "Preconditions" %}</th>
           <th>{% trans "Action" %}</th>
           <th>{% trans "Expected" %}</th>
-          <!--<th>{% trans "Tester comment" %}</th>-->
           <th>{% trans "Status" %}</th>
         </tr>
       </thead>
@@ -57,20 +58,44 @@
             </td>
             <td style="width: 15%">{{ testcaserun.testcase.action|default:""|linebreaksbr }}</td>
             <td style="width: 15%">{{ testcaserun.testcase.expected|default:""|linebreaksbr }}</td>
-            <!--<td style="width: 10%">{{
-                testcaserun.comment|default:""|linebreaksbr }}</td>-->
-            <td style="width: 6em;" title="{{ testcaserun.comment|default:"" }}">
-              <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
-                {% if testcaserun.status == 'OK' %}
-                  <span class="label label-success">{{ testcaserun.get_status_display }}</span>
-                {% elif testcaserun.status == 'NOK' %}
-                  <span class="label label-danger">{{ testcaserun.get_status_display }}</span>
-                {% elif testcaserun.status == 'NT' %}
-                  <span class="label label-default">{{ testcaserun.get_status_display }}</span>
-                {% elif testcaserun.status == 'DN' %}
-                  <span class="label label-info">{{ testcaserun.get_status_display }}</span>
-                {% endif %}
-              </a>
+            <td id="status{{ testcaserun.pk }}" style="width: 6em;" title="{{ testcaserun.comment|default:"" }}">
+              {% if testcaserun.status == 'OK' %}
+                <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                  <span class="label label-success">
+                    {{ testcaserun.get_status_display }}
+                  </span>
+                </a>
+                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
+                  Set untested
+                </button>
+                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-success btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
+                  Set success
+                </button>
+              {% elif testcaserun.status == 'NOK' %}
+                <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                  <span class="label label-danger">
+                    {{ testcaserun.get_status_display }}
+                  </span>
+                </a>
+              {% elif testcaserun.status == 'NT' %}
+                <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                  <span class="label label-default">
+                    {{ testcaserun.get_status_display }}
+                  </span>
+                </a>
+                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-success btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
+                  Set success
+                </button>
+                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
+                  Set untested
+                </button>
+              {% elif testcaserun.status == 'DN' %}
+                <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                  <span class="label label-info">
+                    {{ testcaserun.get_status_display }}
+                  </span>
+                </a>
+              {% endif %}
             </td>
           </tr>
         {% endfor %}
