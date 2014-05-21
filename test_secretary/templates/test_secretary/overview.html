@@ -32,12 +32,12 @@
             <a href="{% url "testrun_overview" testrun.pk %}">{{ testrun }}</a>
             {% if testrun.is_finished %}
               {% if testrun.is_success %}
-                <span class="label label-success">success</span>
+                <span class="label label-success" title="{% trans 'Tests:' %} {{ testrun.success_count }}">success</span>
               {% else %}
                 <span class="label label-danger">failed</span>
               {% endif %}
             {% else %}
-              <span class="label label-info">in progress</span>
+              <span class="label label-info" title="{% trans 'Open:' %} {{ testrun.todo_count }}">in progress</span>
             {% endif %}
           </li>
         {% empty %}

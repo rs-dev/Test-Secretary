@@ -91,11 +91,32 @@ class TestRun(models.Model, AdminUrlMixIn):
 
     @property
     def is_finished(self):
-        return self.testcaserun_set.filter(status='NT').count() == 0
+        """ no untested or undecided testcases
+        """
+        return self.todo_count + self.decision_count == 0
 
     @property
     def is_success(self):
-        return self.testcaserun_set.filter(status='NOK').count() == 0
+        """ nothing failed, also check is_finished
+            unfinished testruns can also be successfully if nothing failed yet
+        """
+        return self.failed_count == 0
+
+    @property
+    def success_count(self):
+        return self.testcaserun_set.filter(status='OK').count()
+
+    @property
+    def failed_count(self):
+        return self.testcaserun_set.filter(status='NOK').count()
+
+    @property
+    def todo_count(self):
+        return self.testcaserun_set.filter(status='NT').count()
+
+    @property
+    def decision_count(self):
+        return self.testcaserun_set.filter(status='DN').count()
 
 
 class TestCaseRun(models.Model, AdminUrlMixIn):
