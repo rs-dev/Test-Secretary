@@ -68,7 +68,7 @@
                 <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
                   Set untested
                 </button>
-                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-success btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
+                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
                   Set success
                 </button>
               {% elif testcaserun.status == 'NOK' %}
@@ -83,7 +83,7 @@
                     {{ testcaserun.get_status_display }}
                   </span>
                 </a>
-                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-success btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
+                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
                   Set success
                 </button>
                 <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
