@@ -5,101 +5,103 @@
 {% regroup testcaseruns by testcase.section.app as testcaseruns_group_app %}
 
 {% for testcaserun_app in testcaseruns_group_app %}
-  <h2>
-    {% if testcaserun_app.grouper.order != None %}
-      {{ testcaserun_app.grouper.order }}.
-    {% endif %}
-    {{ testcaserun_app.grouper.name }}
-  </h2>
-  {% regroup testcaserun_app.list by testcase.section as testcaseruns_group_section %}
-  {% for testcaserun_section in testcaseruns_group_section %}
-    <h3>
-      {% if testcaserun_section.grouper.order != None %}
-        {% if testcaserun_app.grouper.order == None %}
-          #.{{ testcaserun_section.grouper.order }}
-        {% else %}
-          {{ testcaserun_app.grouper.order }}.{{ testcaserun_section.grouper.order }}
-        {% endif %}
+  <div class="break-after avoid-break-inside">
+    <h2>
+      {% if testcaserun_app.grouper.order != None %}
+        {{ testcaserun_app.grouper.order }}.
       {% endif %}
-      {{ testcaserun_section.grouper.name }}
-    </h3>
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>{% trans "Testcase" %}</th>
-          <th>{% trans "Description" %}</th>
-          <th>{% trans "Preconditions" %}</th>
-          <th>{% trans "Action" %}</th>
-          <th>{% trans "Expected" %}</th>
-          <th>{% trans "Status" %}</th>
-        </tr>
-      </thead>
-      <!--<tfoot>
-        <tr>
-          <td>no footer yet</td>
-          <td>tbd</td>
-        </tr>
-      </tfoot>-->
-      <tbody>
-        {% for testcaserun in testcaserun_section.list %}
+      {{ testcaserun_app.grouper.name }}
+    </h2>
+    {% regroup testcaserun_app.list by testcase.section as testcaseruns_group_section %}
+    {% for testcaserun_section in testcaseruns_group_section %}
+      <h3>
+        {% if testcaserun_section.grouper.order != None %}
+          {% if testcaserun_app.grouper.order == None %}
+            #.{{ testcaserun_section.grouper.order }}
+          {% else %}
+            {{ testcaserun_app.grouper.order }}.{{ testcaserun_section.grouper.order }}
+          {% endif %}
+        {% endif %}
+        {{ testcaserun_section.grouper.name }}
+      </h3>
+      <table class="table table-bordered table-striped">
+        <thead>
           <tr>
-            <td style="width: 3em;">{{ testcaserun.testcase.number }}</td>
-            <td style="width: 15%">{{ testcaserun.testcase.name }}</td>
-            <td>{{ testcaserun.testcase.description|default:""|linebreaksbr }}</td>
-            <td style="width: 15%">
-              {% if testcaserun.testcase.preconditions.count %}
-                <ul>
-                  {% for precondition in testcaserun.testcase.preconditions.all %}
-                    <li><a href"#{{ precondition.pk }}">{{ precondition.name }}</a></li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </td>
-            <td style="width: 15%">{{ testcaserun.testcase.action|default:""|linebreaksbr }}</td>
-            <td style="width: 15%">{{ testcaserun.testcase.expected|default:""|linebreaksbr }}</td>
-            <td id="status{{ testcaserun.pk }}" style="width: 6em;" title="{{ testcaserun.comment|default:"" }}">
-              {% if testcaserun.status == 'OK' %}
-                <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
-                  <span class="label label-success">
-                    {{ testcaserun.get_status_display }}
-                  </span>
-                </a>
-                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
-                  Set untested
-                </button>
-                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
-                  Set success
-                </button>
-              {% elif testcaserun.status == 'NOK' %}
-                <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
-                  <span class="label label-danger">
-                    {{ testcaserun.get_status_display }}
-                  </span>
-                </a>
-              {% elif testcaserun.status == 'NT' %}
-                <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
-                  <span class="label label-default">
-                    {{ testcaserun.get_status_display }}
-                  </span>
-                </a>
-                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
-                  Set success
-                </button>
-                <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
-                  Set untested
-                </button>
-              {% elif testcaserun.status == 'DN' %}
-                <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
-                  <span class="label label-info">
-                    {{ testcaserun.get_status_display }}
-                  </span>
-                </a>
-              {% endif %}
-            </td>
+            <th>#</th>
+            <th>{% trans "Testcase" %}</th>
+            <th>{% trans "Description" %}</th>
+            <th>{% trans "Preconditions" %}</th>
+            <th>{% trans "Action" %}</th>
+            <th>{% trans "Expected" %}</th>
+            <th>{% trans "Status" %}</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <!--<tfoot>
+          <tr>
+            <td>no footer yet</td>
+            <td>tbd</td>
+          </tr>
+        </tfoot>-->
+        <tbody>
+          {% for testcaserun in testcaserun_section.list %}
+            <tr>
+              <td style="width: 3em;">{{ testcaserun.testcase.number }}</td>
+              <td style="width: 15%">{{ testcaserun.testcase.name }}</td>
+              <td>{{ testcaserun.testcase.description|default:""|linebreaksbr }}</td>
+              <td style="width: 15%">
+                {% if testcaserun.testcase.preconditions.count %}
+                  <ul>
+                    {% for precondition in testcaserun.testcase.preconditions.all %}
+                      <li><a href"#{{ precondition.pk }}">{{ precondition.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </td>
+              <td style="width: 15%">{{ testcaserun.testcase.action|default:""|linebreaksbr }}</td>
+              <td style="width: 15%">{{ testcaserun.testcase.expected|default:""|linebreaksbr }}</td>
+              <td id="status{{ testcaserun.pk }}" style="width: 6em;" title="{{ testcaserun.comment|default:"" }}">
+                {% if testcaserun.status == 'OK' %}
+                  <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                    <span class="label label-success">
+                      {{ testcaserun.get_status_display }}
+                    </span>
+                  </a>
+                  <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
+                    Set untested
+                  </button>
+                  <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
+                    Set success
+                  </button>
+                {% elif testcaserun.status == 'NOK' %}
+                  <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                    <span class="label label-danger">
+                      {{ testcaserun.get_status_display }}
+                    </span>
+                  </a>
+                {% elif testcaserun.status == 'NT' %}
+                  <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                    <span class="label label-default">
+                      {{ testcaserun.get_status_display }}
+                    </span>
+                  </a>
+                  <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
+                    Set success
+                  </button>
+                  <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
+                    Set untested
+                  </button>
+                {% elif testcaserun.status == 'DN' %}
+                  <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                    <span class="label label-info">
+                      {{ testcaserun.get_status_display }}
+                    </span>
+                  </a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   {% endfor %}
 {% endfor %}
