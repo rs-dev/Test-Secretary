@@ -37,7 +37,9 @@
                 <span class="label label-danger">failed</span>
               {% endif %}
             {% else %}
-              <span class="label label-info" title="{% trans 'Open:' %} {{ testrun.todo_count }}">in progress</span>
+              <span class="label label-info" title="{% trans 'Open:' %} {{ testrun.todo_count }}&#013;{% trans 'Success:' %} {{ testrun.success_count }}&#013;{% trans 'Failed:' %} {{ testrun.failed_count }}&#013;{% trans 'Decision needed:' %} {{ testrun.decision_count }}">
+                in progress
+              </span>
             {% endif %}
           </li>
         {% empty %}
