@@ -3,3 +3,4 @@ __pycache__
 env
 *.png
 /static
+logo.png
