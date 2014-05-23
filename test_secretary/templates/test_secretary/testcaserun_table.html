@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load iterator %}
 
 {% include 'test_secretary/testcaserun_table.js' %}
 
@@ -59,9 +60,9 @@
               </td>
               <td style="width: 15%">{{ testcaserun.testcase.action|default:""|linebreaksbr }}</td>
               <td style="width: 15%">{{ testcaserun.testcase.expected|default:""|linebreaksbr }}</td>
-              <td id="status{{ testcaserun.pk }}" style="width: 6em;" title="{{ testcaserun.comment|default:"" }}">
+              <td id="status{{ testcaserun.pk }}" style="width: 6em;" title="{{ testcaserun.comment|default:'' }}">
                 {% if testcaserun.status == 'OK' %}
-                  <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                  <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
                     <span class="label label-success">
                       {{ testcaserun.get_status_display }}
                     </span>
@@ -73,13 +74,13 @@
                     Set success
                   </button>
                 {% elif testcaserun.status == 'NOK' %}
-                  <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                  <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
                     <span class="label label-danger">
                       {{ testcaserun.get_status_display }}
                     </span>
                   </a>
                 {% elif testcaserun.status == 'NT' %}
-                  <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                  <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
                     <span class="label label-default">
                       {{ testcaserun.get_status_display }}
                     </span>
@@ -91,7 +92,7 @@
                     Set untested
                   </button>
                 {% elif testcaserun.status == 'DN' %}
-                  <a href="{% url 'edit_testcaserun_single' testcaserun.pk %}">
+                  <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
                     <span class="label label-info">
                       {{ testcaserun.get_status_display }}
                     </span>

@@ -1,4 +1,5 @@
 import re
+import itertools
 from datetime import datetime, date
 
 from django.shortcuts import render, get_object_or_404
@@ -24,7 +25,7 @@ def app_overview(request, aid):
 
 
 def testrun_overview(request, rid):
-    d = {}
+    d = {'counter': itertools.count()}
     testrun = TestRun.objects.get(pk=rid)
     d['testrun'] = testrun
     d['testcaseruns'] = testrun.testcaserun_set.all()
