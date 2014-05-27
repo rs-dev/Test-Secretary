@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 
 from .models import *
 from .forms import TestCaseRunForm
+from unittester.testrunner import run_tests
 
 
 def home(request):
@@ -108,6 +109,7 @@ def edit_testcaserun(request, trid, elemno):
 
     d['testcaserun_form'] = testcaserun_form
     return render(request, 'test_secretary/edit_testcaserun_multiple.html', d)
+
 
 def set_testcaserun_status(request, tcrid, status):
     testcaserun = get_object_or_404(TestCaseRun, pk=tcrid)

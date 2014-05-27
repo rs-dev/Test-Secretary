@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block main %}
+  <h1>{{ testcaserun.testrun }}</h1>
+
+  <div class="well">
+    {% if unittests %}
+      <ul>
+        {% for unittest in unittests %}
+          {{ unittest }}
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="alert alert-info">
+        No unittests set for TestCase
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <strong>{{ testcaserun.testcase }}</strong>
+      <a href="{{ testcaserun.testcase.get_admin_url }}" target="_blank">
+        <button class="btn btn-primary btn-xs" style="vertical-align:top;">Edit</button>
+      </a>
+    </div>
+
+    <div class="panel-body">
+      <dl class="dl-horizontal">
+        <dt>{% trans 'Description' %}</dt>
+        <dd>{{ testcaserun.testcase.description|default:'-'|linebreaksbr }}</dd>
+        <dt>{% trans 'Action' %}</dt>
+        <dd>{{ testcaserun.testcase.action|default:'-'|linebreaksbr }}</dd>
+        <dt>{% trans 'Expected' %}</dt>
+        <dd>{{ testcaserun.testcase.expected|default:'-'|linebreaksbr }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <form role="form" method=POST action="">
+    {% csrf_token %}
+    {{ testcaserun_form }}
+    <input type="submit" value="Save" class="btn btn-success form-element"></input>
+    {% block form_buttons_bottom %}{% endblock %}
+  </form>
+
+  {% block bottom %}
+    <a href="{% url 'testrun_overview' testcaserun.testrun.pk %}" class="btn btn-info">TestRun</a>
+  {% endblock %}
+{% endblock %}
