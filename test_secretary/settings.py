@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'test_secretary',
+    'unittester',
     'south',
     'django_extensions',
 )

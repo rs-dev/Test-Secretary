@@ -4,3 +4,4 @@ env
 *.png
 /static
 logo.png
+unittester/config.py
