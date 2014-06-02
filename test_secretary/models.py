@@ -4,8 +4,6 @@ from django.db import models
 from django.core import urlresolvers
 from django.contrib.contenttypes.models import ContentType
 
-from unittester.models import UnitTest
-
 
 STATUS = (('NT', 'untested'),
           ('OK', 'success'),
@@ -63,7 +61,6 @@ class TestCase(models.Model, AdminUrlMixIn):
     preconditions = models.ManyToManyField('self', through='Precondition', null=True, blank=True, symmetrical=False, related_name='precondition_set')
     action = models.TextField(null=True, blank=True)
     expected = models.TextField(null=True, blank=True)
-    unittests = models.ManyToManyField(UnitTest, null=True, blank=True)
 
     def __str__(self):
         return '%s - %s' % (self.section, self.name)

@@ -10,7 +10,7 @@
     {% if unittests %}
       <ul>
         {% for unittest in unittests %}
-          {{ unittest }}
+          <li>{{ unittest }}</li>
         {% endfor %}
       </ul>
     {% else %}
@@ -43,7 +43,7 @@
   <form role="form" method=POST action="">
     {% csrf_token %}
     {{ testcaserun_form }}
-    <input type="submit" value="Save" class="btn btn-success form-element"></input>
+    <input type="submit" value="Run" class="btn btn-success form-element"></input>
     {% block form_buttons_bottom %}{% endblock %}
   </form>
 

@@ -1,5 +1,7 @@
 from django.contrib import admin
+
 from .models import *
+from unittester.models import UnitTest
 
 
 class ApplicationAdmin(admin.ModelAdmin):
@@ -11,14 +13,18 @@ class TestSectionAdmin(admin.ModelAdmin):
     list_filter = ('app',)
 
 
+class UnitTestInline(admin.TabularInline):
+    model = UnitTest.testcases.through
+
+
 class TestCaseAdmin(admin.ModelAdmin):
     list_display = ('number', 'name', 'section', 'active')
     list_filter = ('section', 'active', 'section__app')
     search_fields = ('name', 'description', 'action', 'expected')
 
-
-class TestCaseRunInline(admin.TabularInline):
-    model = TestCaseRun
+    inlines = [
+        UnitTestInline,
+    ]
 
 
 class TestCaseRunAdmin(admin.ModelAdmin):
@@ -29,10 +35,6 @@ class TestCaseRunAdmin(admin.ModelAdmin):
 class TestRunAdmin(admin.ModelAdmin):
     list_display = ('name', 'version', 'date')
     list_filter = ('version', 'date')
-
-#    inlines = [
-#        TestCaseRunInline,
-#    ]
 
 
 admin.site.register(Application, ApplicationAdmin)
