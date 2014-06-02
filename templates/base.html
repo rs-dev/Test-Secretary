@@ -26,7 +26,7 @@
   <body>
     <div class="content-block">
       {% block logo %}
-        <img id="logo" src={% static 'img/logo.png' %}></img>
+        <a href="{% url 'overview' %}"><img id="logo" src={% static 'img/logo.png' %}></img></a>
       {% endblock %}
       {% block main %}
         <h1>Error!</h1>
