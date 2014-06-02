@@ -16,6 +16,7 @@ def run_testcaserun_single(request, tcrid):
     if request.method == 'POST':
         test_results = []
         test_runs = []
+        descriptions = []
 
         for test in unittests:
             test_result = run_test(test.test_module)
@@ -26,8 +27,17 @@ def run_testcaserun_single(request, tcrid):
             utr.tests_run = test_result.testsRun
             description = '\n'.join(map(lambda x: x[1], errors+failures))
             utr.description = description
+            descriptions.append(description)
             utr.save()
+            test_results.append(test_result)
             test_runs.append(utr)
+
+        is_success = all([run.wasSuccessful() for run in test_results])
+        if testcaserun.status == 'NT':
+            testcaserun.status = 'OK' if is_success else 'NOK'
+            if not testcaserun.comment:
+                testcaserun.comment = ('\n'+'='*79+'\n').join(descriptions)
+            testcaserun.save()
 
         d['test_results'] = test_results
         d['test_runs'] = test_runs
