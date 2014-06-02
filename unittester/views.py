@@ -8,10 +8,10 @@ from unittester.testrunner import run_tests
 
 def run_testcaserun_single(request, tcrid):
     testcaserun = get_object_or_404(TestCaseRun, pk=tcrid)
-    d['testcaserun'] = testcaserun
-    unittests = testcaserun.testrun.unittests.all()
-    d['unittests'] = unittests
-
+    unittests = testcaserun.testcase.unittests.all()
+    d = {'testcaserun': testcaserun,
+         'unittests': unittests
+        }
     if request.method == 'POST':
         d['test_results'] = run_tests(unittests)
 
