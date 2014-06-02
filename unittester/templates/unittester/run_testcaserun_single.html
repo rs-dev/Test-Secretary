@@ -6,6 +6,19 @@
 {% block main %}
   <h1>{{ testcaserun.testrun }}</h1>
 
+  {% for test_run in test_runs %}
+    {% if test_run.is_success %}
+      <div class="alert alert-success">
+        <strong>Success!</strong> {{ test_run.tests_run }} test{{ test_run.tests_run|pluralize }} successful.
+      </div>
+    {% else %}
+      <div class="alert alert-danger">
+        <strong>Tests failed!</strong> {{ test_run.errors }} error{{ test_run.errors|pluralize }} | {{ test_run.failures }} failures{{ test_run.failures|pluralize }}.<br>
+        {{ test_run.description }}
+      </div>
+    {% endif %}
+  {% endfor %}
+
   <div class="well">
     {% if unittests %}
       <ul>

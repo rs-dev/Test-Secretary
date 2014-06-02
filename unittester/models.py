@@ -21,7 +21,7 @@ class UnitTestRun(models.Model):
     date = models.DateTimeField(auto_now=True)
     errors = models.PositiveIntegerField(default=0)
     failures = models.PositiveIntegerField(default=0)
-    success = models.PositiveIntegerField(default=0)
+    tests_run = models.PositiveIntegerField(default=0)
     description = models.TextField(blank=True, null=True)
 
     def is_success(self):
