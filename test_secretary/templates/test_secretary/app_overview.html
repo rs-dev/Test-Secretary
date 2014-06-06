@@ -14,23 +14,17 @@
           <th>#</th>
           <th>{% trans "Name" %}</th>
           <th>{% trans "Description" %}</th>
-          <th>{% trans "Preconditions" %}</th>
+          <th>{% trans "Action" %}</th>
+          <th>{% trans "Expected" %}</th>
         </thead>
         <tbody>
           {% for testcase in section.active_testcases %}
             <tr>
               <td>{{ testcase.number }}</td>
               <td>{{ testcase.name }}</td>
-              <td>{{ testcase.description|linebreaksbr }}</td>
-              <td>
-                {% if testcase.preconditions.count %}
-                  <ul>
-                    {% for precondition in testcase.precondition_set.all %}
-                      <li><a href"#{{ precondition.pk }}">{{ precondition }}</a></li>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </td>
+              <td>{{ testcase.description|default:"-"|linebreaksbr }}</td>
+              <td>{{ testcase.action|default:"-"|linebreaksbr }}</td>
+              <td>{{ testcase.expected|default:"-"|linebreaksbr }}</td>
             </tr>
           {% endfor %}
         </tbody>
