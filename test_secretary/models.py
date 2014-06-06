@@ -79,7 +79,7 @@ class Precondition(models.Model, AdminUrlMixIn):
 class TestRun(models.Model, AdminUrlMixIn):
     name = models.CharField(max_length=50)
     comment = models.TextField(null=True, blank=True)
-    version = models.CharField(max_length=15)
+    version = models.CharField(max_length=40)
     date = models.DateTimeField(default=datetime.now, blank=True)
     testcases = models.ManyToManyField(TestCase, through='TestCaseRun')
 
