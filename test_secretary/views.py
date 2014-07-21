@@ -16,8 +16,11 @@ def home(request):
     d = {}
     d['apps'] = Application.objects.all()
     testruns = {'own': [], 'other': []}
-    testruns['own'] = TestRun.objects.filter(user=request.user)
-    testruns['other'] = TestRun.objects.exclude(user=request.user)
+    if request.user.is_authenticated():
+        testruns['own'] = TestRun.objects.filter(user=request.user)
+        testruns['other'] = TestRun.objects.exclude(user=request.user)
+    else:
+        testruns['other'] = TestRun.objects.all()
 
     d['testruns'] = testruns
     return render(request, 'test_secretary/overview.html', d)
@@ -30,6 +33,7 @@ def app_overview(request, aid):
     return render(request, 'test_secretary/app_overview.html', d)
 
 
+@login_required
 def testrun_overview(request, rid):
     d = {'counter': itertools.count()}
     testrun = TestRun.objects.get(pk=rid)
