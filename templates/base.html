@@ -24,9 +24,13 @@
     <![endif]-->
   </head>
   <body>
+    {% include "navbar.html" %}
+
     <div class="content-block">
       {% block logo %}
-        <a href="{% url 'overview' %}"><img id="logo" src={% static 'img/logo.png' %}></img></a>
+          <a href="{% url 'overview' %}">
+            <img id="logo" src={% static 'img/logo.png' %}></img>
+          </a>
       {% endblock %}
       {% block main %}
         <h1>Error!</h1>
