@@ -5,6 +5,7 @@ from datetime import datetime, date
 from django.shortcuts import render, get_object_or_404
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .forms import TestCaseRunForm
@@ -36,6 +37,7 @@ def testrun_overview(request, rid):
 
 TCREGEX = re.compile('testcase(?P<tcid>\d+)')
 
+@login_required
 def new_testrun(request):
     d = {}
     if request.method == 'POST':
