@@ -15,7 +15,11 @@ from unittester.testrunner import run_tests
 def home(request):
     d = {}
     d['apps'] = Application.objects.all()
-    d['testruns'] = TestRun.objects.all()
+    testruns = {'own': [], 'other': []}
+    testruns['own'] = TestRun.objects.filter(user=request.user)
+    testruns['other'] = TestRun.objects.exclude(user=request.user)
+
+    d['testruns'] = testruns
     return render(request, 'test_secretary/overview.html', d)
 
 
@@ -50,7 +54,8 @@ def new_testrun(request):
 
         if testcases:
             print('Saving new TestRun: %s' % name)
-            testrun = TestRun(name=name, comment=comment, version=version)
+            testrun = TestRun(name=name, comment=comment, version=version,
+                              user=request.user)
             testrun.save()
             for testcase in testcases:
                 tcr = TestCaseRun(testcase=testcase, testrun=testrun)

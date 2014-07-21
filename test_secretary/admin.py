@@ -33,8 +33,8 @@ class TestCaseRunAdmin(admin.ModelAdmin):
 
 
 class TestRunAdmin(admin.ModelAdmin):
-    list_display = ('name', 'version', 'date')
-    list_filter = ('version', 'date')
+    list_display = ('name', 'version', 'date', 'user')
+    list_filter = ('version', 'date', 'user')
 
 
 admin.site.register(Application, ApplicationAdmin)

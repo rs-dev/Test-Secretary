@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db import models
 from django.core import urlresolvers
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -82,6 +83,7 @@ class TestRun(models.Model, AdminUrlMixIn):
     version = models.CharField(max_length=40)
     date = models.DateTimeField(default=datetime.now, blank=True)
     testcases = models.ManyToManyField(TestCase, through='TestCaseRun')
+    user = models.ForeignKey(User)
 
     def __str__(self):
         return '[%s] %s' % (self.date.strftime('%Y-%m-%d %H:%M'), self.name)

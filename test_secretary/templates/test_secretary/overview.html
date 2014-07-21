@@ -26,24 +26,47 @@
       <h3 class="panel-title">Test Runs</h3>
     </div>
     <div class="panel-body">
+      <h4>My Testruns</h4>
       <ul>
-        {% for testrun in testruns %}
+        {% for testrun_own in testruns.own %}
           <li>
-            <a href="{% url "testrun_overview" testrun.pk %}">{{ testrun }}</a>
-            {% if testrun.is_finished %}
-              {% if testrun.is_success %}
-                <span class="label label-success" title="{% trans 'Tests:' %} {{ testrun.success_count }}">success</span>
+            <a href="{% url "testrun_overview" testrun_own.pk %}">{{ testrun_own }}</a>
+            {% if testrun_own.is_finished %}
+              {% if testrun_own.is_success %}
+                <span class="label label-success" title="{% trans 'Tests:' %} {{ testrun_own.success_count }}">success</span>
               {% else %}
                 <span class="label label-danger">failed</span>
               {% endif %}
             {% else %}
-              <span class="label label-info" title="{% trans 'Open:' %} {{ testrun.todo_count }}&#013;{% trans 'Success:' %} {{ testrun.success_count }}&#013;{% trans 'Failed:' %} {{ testrun.failed_count }}&#013;{% trans 'Decision needed:' %} {{ testrun.decision_count }}">
+              <span class="label label-info" title="{% trans 'Open:' %} {{ testrun_own.todo_count }}&#013;{% trans 'Success:' %} {{ testrun_own.success_count }}&#013;{% trans 'Failed:' %} {{ testrun_own.failed_count }}&#013;{% trans 'Decision needed:' %} {{ testrun_own.decision_count }}">
                 in progress
               </span>
             {% endif %}
           </li>
         {% empty %}
-            <div class="alert alert-info">No testruns</div>
+            <div class="alert alert-info">No own testruns</div>
+        {% endfor %}
+      </ul>
+
+      <h4>Other Testruns</h4>
+      <ul>
+        {% for testrun_other in testruns.other %}
+          <li>
+            <a href="{% url "testrun_overview" testrun_other.pk %}">{{ testrun_other }}</a>
+            {% if testrun_other.is_finished %}
+              {% if testrun_other.is_success %}
+                <span class="label label-success" title="{% trans 'Tests:' %} {{ testrun_other.success_count }}">success</span>
+              {% else %}
+                <span class="label label-danger">failed</span>
+              {% endif %}
+            {% else %}
+              <span class="label label-info" title="{% trans 'Open:' %} {{ testrun_other.todo_count }}&#013;{% trans 'Success:' %} {{ testrun_other.success_count }}&#013;{% trans 'Failed:' %} {{ testrun_other.failed_count }}&#013;{% trans 'Decision needed:' %} {{ testrun_other.decision_count }}">
+                in progress
+              </span>
+            {% endif %}
+          </li>
+        {% empty %}
+            <div class="alert alert-info">No other testruns</div>
         {% endfor %}
       </ul>
       <p>
