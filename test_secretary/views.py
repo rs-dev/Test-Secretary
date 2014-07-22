@@ -1,4 +1,5 @@
 import re
+import logging
 import itertools
 from datetime import datetime, date
 
@@ -6,10 +7,14 @@ from django.shortcuts import render, get_object_or_404
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
 
 from .models import *
 from .forms import TestCaseRunForm
 from unittester.testrunner import run_tests
+
+
+logger = logging.Logger('test_secretary#views')
 
 
 def home(request):
@@ -52,27 +57,29 @@ def new_testrun(request):
         name = request.POST.get('name', 'TestRun %s'% datetime.now().strftime('%c'))
         comment = request.POST.get('comment', None)
         version = request.POST.get('version', 'undefined')
-        testcase_ids = [TCREGEX.match(elem).groupdict()['tcid'] for elem in request.POST if TCREGEX.match(elem)]
+        testcase_ids = [TCREGEX.match(elem).groupdict()['tcid']
+                          for elem in request.POST if TCREGEX.match(elem)]
         # get TestCases from ids
         testcases = [TestCase.objects.get(pk=tcid) for tcid in testcase_ids]
 
         if testcases:
-            print('Saving new TestRun: %s' % name)
+            logger.info('Saving new TestRun: %s' % name)
             testrun = TestRun(name=name, comment=comment, version=version,
                               user=request.user)
             testrun.save()
             for testcase in testcases:
-                tcr = TestCaseRun(testcase=testcase, testrun=testrun)
+                tcr = TestCaseRun(testcase=testcase, testrun=testrun,
+                                  editor=request.user)
                 tcr.save()
             return HttpResponseRedirect(reverse('testrun_overview', kwargs={'rid': testrun.pk}))
         else:
             d['errmsg'] = 'No testcases selected'
 
     d['apps'] = Application.objects.filter(active=True)
-
     return render(request, 'test_secretary/new_testrun.html', d)
 
 
+@login_required
 def edit_testcaserun_single(request, tcrid):
     d = {'saved': False}
 
@@ -83,6 +90,9 @@ def edit_testcaserun_single(request, tcrid):
         testcaserun_form = TestCaseRunForm(request.POST, instance=testcaserun)
         if testcaserun_form.is_valid():
             testcaserun_form.save()
+            testcaserun = TestCaseRun.objects.get(pk=testcaserun.pk)
+            testcaserun.editor = request.user
+            testcaserun.save()
             d['saved'] = True
     else:
         testcaserun_form = TestCaseRunForm(instance=testcaserun)
@@ -91,6 +101,7 @@ def edit_testcaserun_single(request, tcrid):
     return render(request, 'test_secretary/edit_testcaserun_single.html', d)
 
 
+@login_required
 def edit_testcaserun(request, trid, elemno):
     d = {'saved': False}
     elemno = int(elemno)
@@ -105,7 +116,6 @@ def edit_testcaserun(request, trid, elemno):
     else:
         testcaserun = testcaseruns[tcr_count-1]
         d['elemno'] = tcr_count-1
-    d['testcaserun'] = testcaserun
 
     is_last = elemno >= tcr_count-1
     d['is_last'] = is_last
@@ -114,17 +124,23 @@ def edit_testcaserun(request, trid, elemno):
         testcaserun_form = TestCaseRunForm(request.POST, instance=testcaserun)
         if testcaserun_form.is_valid():
             testcaserun_form.save()
+            testcaserun = TestCaseRun.objects.get(pk=testcaserun.pk)
+            testcaserun.editor = request.user
+            testcaserun.save()
             d['saved'] = True
     else:
         testcaserun_form = TestCaseRunForm(instance=testcaserun)
 
+    d['testcaserun'] = testcaserun
     d['testcaserun_form'] = testcaserun_form
     return render(request, 'test_secretary/edit_testcaserun_multiple.html', d)
 
 
+@login_required
 def set_testcaserun_status(request, tcrid, status):
     testcaserun = get_object_or_404(TestCaseRun, pk=tcrid)
     if status in list(zip(*STATUS))[0]:
         testcaserun.status = status
+        testcaserun.editor = request.user
         testcaserun.save()
     return HttpResponse('')

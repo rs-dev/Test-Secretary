@@ -4,7 +4,8 @@ from django.db import models
 from django.core import urlresolvers
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-
+from django_extensions.db.fields import ModificationDateTimeField
+from django.utils.translation import ugettext as _
 
 STATUS = (('NT', 'untested'),
           ('OK', 'success'),
@@ -127,6 +128,8 @@ class TestCaseRun(models.Model, AdminUrlMixIn):
     testrun = models.ForeignKey(TestRun)
     status = models.CharField(max_length=3, choices=STATUS, default='NT')
     comment = models.TextField(null=True, blank=True)
+    modified = ModificationDateTimeField(help_text=_('Last Status Change'))
+    editor = models.ForeignKey(User, help_text=_('Last Editor'))
 
     def __str__(self):
         return '%s: %s' % (self.testrun, self.testcase)

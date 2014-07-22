@@ -28,8 +28,9 @@ class TestCaseAdmin(admin.ModelAdmin):
 
 
 class TestCaseRunAdmin(admin.ModelAdmin):
-    list_display = ('testcase', 'testrun', 'status')
-    list_filter = ('testcase__section', 'testrun', 'status', 'testrun__date')
+    list_display = ('testcase', 'testrun', 'status', 'editor', 'modified')
+    list_filter = ('testcase__section', 'testrun', 'status', 'testrun__date',
+                   'editor')
 
 
 class TestRunAdmin(admin.ModelAdmin):
