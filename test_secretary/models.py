@@ -92,6 +92,10 @@ class TestRun(models.Model, AdminUrlMixIn):
     class Meta:
         get_latest_by = 'date'
         ordering = ['-date']
+        permissions = (
+            ("view_testruns", _("Can see own tests running")),
+            ("view_other_testruns", _("Can see all tests running")),
+        )
 
     @property
     def is_finished(self):
@@ -136,3 +140,6 @@ class TestCaseRun(models.Model, AdminUrlMixIn):
 
     class Meta:
         ordering = ('testcase__section__app__name', 'testcase__section__order', 'testcase__section__name', 'testcase__number')
+        permissions = (
+            ("view_testcaserun_status", _("Can see own tests running")),
+        )

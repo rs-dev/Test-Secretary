@@ -34,7 +34,9 @@
             <th>{% trans "Preconditions" %}</th>
             <th>{% trans "Action" %}</th>
             <th>{% trans "Expected" %}</th>
-            <th>{% trans "Status" %}</th>
+            {% if perms.test_secretary.view_testcaserun_status or testcase.user == user %}
+              <th>{% trans "Status" %}</th>
+            {% endif %}
           </tr>
         </thead>
         <!--<tfoot>
@@ -60,45 +62,47 @@
               </td>
               <td style="width: 15%">{{ testcaserun.testcase.action|default:""|linebreaksbr }}</td>
               <td style="width: 15%">{{ testcaserun.testcase.expected|default:""|linebreaksbr }}</td>
-              <td id="status{{ testcaserun.pk }}" style="width: 6em;" title="{{ testcaserun.comment|default:'' }}">
-                {% if testcaserun.status == 'OK' %}
-                  <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
-                    <span class="label label-success">
-                      {{ testcaserun.get_status_display }}
-                    </span>
-                  </a>
-                  <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
-                    Set untested
-                  </button>
-                  <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
-                    Set success
-                  </button>
-                {% elif testcaserun.status == 'NOK' %}
-                  <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
-                    <span class="label label-danger">
-                      {{ testcaserun.get_status_display }}
-                    </span>
-                  </a>
-                {% elif testcaserun.status == 'NT' %}
-                  <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
-                    <span class="label label-default">
-                      {{ testcaserun.get_status_display }}
-                    </span>
-                  </a>
-                  <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
-                    Set success
-                  </button>
-                  <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
-                    Set untested
-                  </button>
-                {% elif testcaserun.status == 'DN' %}
-                  <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
-                    <span class="label label-info">
-                      {{ testcaserun.get_status_display }}
-                    </span>
-                  </a>
-                {% endif %}
-              </td>
+              {% if perms.test_secretary.view_testcaserun_status or testcase.user == user %}
+                <td id="status{{ testcaserun.pk }}" style="width: 6em;" title="{{ testcaserun.comment|default:'' }}">
+                  {% if testcaserun.status == 'OK' %}
+                    <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
+                      <span class="label label-success">
+                        {{ testcaserun.get_status_display }}
+                      </span>
+                    </a>
+                    <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
+                      Set untested
+                    </button>
+                    <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
+                      Set success
+                    </button>
+                  {% elif testcaserun.status == 'NOK' %}
+                    <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
+                      <span class="label label-danger">
+                        {{ testcaserun.get_status_display }}
+                      </span>
+                    </a>
+                  {% elif testcaserun.status == 'NT' %}
+                    <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
+                      <span class="label label-default">
+                        {{ testcaserun.get_status_display }}
+                      </span>
+                    </a>
+                    <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
+                      Set success
+                    </button>
+                    <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs hidden" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
+                      Set untested
+                    </button>
+                  {% elif testcaserun.status == 'DN' %}
+                    <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
+                      <span class="label label-info">
+                        {{ testcaserun.get_status_display }}
+                      </span>
+                    </a>
+                  {% endif %}
+                </td>
+              {% endif %}
             </tr>
           {% endfor %}
         </tbody>

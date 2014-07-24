@@ -6,6 +6,12 @@
 
   <h1>Overview</h1>
 
+  {% if not user.is_authenticated %}
+    <div class="alert alert-info">
+      Please login to use TestSecretary
+    </div>
+  {% endif %}
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Applications</h3>
@@ -21,12 +27,12 @@
     </div>
   </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Test Runs</h3>
-    </div>
-    <div class="panel-body">
-      {% if user.is_authenticated %}
+  {% if perms.test_secretary.view_testruns %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Test Runs</h3>
+      </div>
+      <div class="panel-body">
         <h4>My Testruns</h4>
         <ul>
           {% for testrun_own in testruns.own %}
@@ -48,36 +54,39 @@
             <div class="alert alert-info">No own testruns</div>
           {% endfor %}
         </ul>
-
-        <h4>Other Testruns</h4>
-      {% else %}
-        <h4>Testruns</h4>
-      {% endif %}
-      <ul>
-        {% for testrun_other in testruns.other %}
-          <li>
-            <a href="{% url "testrun_overview" testrun_other.pk %}">{{ testrun_other }}</a>
-            {% if testrun_other.is_finished %}
-              {% if testrun_other.is_success %}
-                <span class="label label-success" title="{% trans 'Tests:' %} {{ testrun_other.success_count }}">success</span>
-              {% else %}
-                <span class="label label-danger">failed</span>
-              {% endif %}
-            {% else %}
-              <span class="label label-info" title="{% trans 'Open:' %} {{ testrun_other.todo_count }}&#013;{% trans 'Success:' %} {{ testrun_other.success_count }}&#013;{% trans 'Failed:' %} {{ testrun_other.failed_count }}&#013;{% trans 'Decision needed:' %} {{ testrun_other.decision_count }}">
-                in progress
-              </span>
-            {% endif %}
-          </li>
-        {% empty %}
-            <div class="alert alert-info">No other testruns</div>
-        {% endfor %}
-      </ul>
-      <p>
-        <a class="btn btn-primary" style="margin: 5px" href={% url "new_testrun" %}>
-          {% trans "New TestRun" %} {% if not user.is_authenticated %}(Login required){% endif %}
-        </a>
-      </p>
+        {% if perms.test_secretary.view_other_testruns %}
+          <h4>Other Testruns</h4>
+          <ul>
+            {% for testrun_other in testruns.other %}
+              <li>
+                <a href="{% url "testrun_overview" testrun_other.pk %}">{{ testrun_other }}</a>
+                {% if perms.test_secretary.view_testcaserun_status %}
+                  {% if testrun_other.is_finished %}
+                    {% if testrun_other.is_success %}
+                      <span class="label label-success" title="{% trans 'Tests:' %} {{ testrun_other.success_count }}">success</span>
+                    {% else %}
+                      <span class="label label-danger">failed</span>
+                    {% endif %}
+                  {% else %}
+                    <span class="label label-info" title="{% trans 'Open:' %} {{ testrun_other.todo_count }}&#013;{% trans 'Success:' %} {{ testrun_other.success_count }}&#013;{% trans 'Failed:' %} {{ testrun_other.failed_count }}&#013;{% trans 'Decision needed:' %} {{ testrun_other.decision_count }}">
+                      in progress
+                    </span>
+                  {% endif %}
+                {% endif %}
+              </li>
+            {% empty %}
+                <div class="alert alert-info">No other testruns</div>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% if perms.test_secretary.add_testrun %}
+          <p>
+            <a class="btn btn-primary" style="margin: 5px" href={% url "new_testrun" %}>
+              {% trans "New TestRun" %}
+            </a>
+          </p>
+        {% endif %}
+      </div>
     </div>
-  </div>
+  {% endif %}
 {% endblock %}

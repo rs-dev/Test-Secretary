@@ -6,7 +6,7 @@ from datetime import datetime, date
 from django.shortcuts import render, get_object_or_404
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import ugettext as _
 
 from .models import *
@@ -20,12 +20,12 @@ logger = logging.Logger('test_secretary#views')
 def home(request):
     d = {}
     d['apps'] = Application.objects.all()
-    testruns = {'own': [], 'other': []}
-    if request.user.is_authenticated():
+
+    testruns = {}
+    if request.user.has_perm('test_secretary.view_testruns'):
+        if request.user.has_perm('test_secretary.view_other_testruns'):
+            testruns['other'] = TestRun.objects.exclude(user=request.user)
         testruns['own'] = TestRun.objects.filter(user=request.user)
-        testruns['other'] = TestRun.objects.exclude(user=request.user)
-    else:
-        testruns['other'] = TestRun.objects.all()
 
     d['testruns'] = testruns
     return render(request, 'test_secretary/overview.html', d)
@@ -39,9 +39,11 @@ def app_overview(request, aid):
 
 
 @login_required
+@permission_required('test_secretary.view_testruns', raise_exception=True)
 def testrun_overview(request, rid):
     d = {'counter': itertools.count()}
-    testrun = TestRun.objects.get(pk=rid)
+    testrun = get_object_or_404(TestRun, pk=rid)
+
     d['testrun'] = testrun
     d['testcaseruns'] = testrun.testcaserun_set.all()
 
@@ -51,6 +53,7 @@ def testrun_overview(request, rid):
 TCREGEX = re.compile('testcase(?P<tcid>\d+)')
 
 @login_required
+@permission_required('test_secretary.add_testrun', raise_exception=True)
 def new_testrun(request):
     d = {}
     if request.method == 'POST':
@@ -80,6 +83,7 @@ def new_testrun(request):
 
 
 @login_required
+@permission_required('test_secretary.change_testcaserun', raise_exception=True)
 def edit_testcaserun_single(request, tcrid):
     d = {'saved': False}
 
@@ -102,6 +106,7 @@ def edit_testcaserun_single(request, tcrid):
 
 
 @login_required
+@permission_required('test_secretary.change_testcaserun', raise_exception=True)
 def edit_testcaserun(request, trid, elemno):
     d = {'saved': False}
     elemno = int(elemno)
@@ -137,6 +142,7 @@ def edit_testcaserun(request, trid, elemno):
 
 
 @login_required
+@permission_required('test_secretary.change_testcaserun', raise_exception=True)
 def set_testcaserun_status(request, tcrid, status):
     testcaserun = get_object_or_404(TestCaseRun, pk=tcrid)
     if status in list(zip(*STATUS))[0]:
