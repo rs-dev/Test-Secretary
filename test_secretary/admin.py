@@ -18,7 +18,7 @@ class UnitTestInline(admin.TabularInline):
 
 
 class TestCaseAdmin(admin.ModelAdmin):
-    list_display = ('number', 'name', 'section', 'active')
+    list_display = ('order', 'name', 'section', 'active')
     list_filter = ('section', 'active', 'section__app')
     search_fields = ('name', 'description', 'action', 'expected')
 

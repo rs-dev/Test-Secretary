@@ -20,7 +20,7 @@
         <tbody>
           {% for testcase in section.active_testcases %}
             <tr>
-              <td>{{ testcase.number }}</td>
+              <td>{{ testcase.order }}</td>
               <td>{{ testcase.name }}</td>
               <td>{{ testcase.description|default:"-"|linebreaksbr }}</td>
               <td>{{ testcase.action|default:"-"|linebreaksbr }}</td>

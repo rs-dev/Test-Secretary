@@ -48,7 +48,7 @@
         <tbody>
           {% for testcaserun in testcaserun_section.list %}
             <tr>
-              <td style="width: 3em;">{{ testcaserun.testcase.number }}</td>
+              <td style="width: 3em;">{{ testcaserun.testcase.order }}</td>
               <td style="width: 15%">{{ testcaserun.testcase.name }}</td>
               <td>{{ testcaserun.testcase.description|default:""|linebreaksbr }}</td>
               <td style="width: 15%">

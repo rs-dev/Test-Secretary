@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'test_secretary',
     'unittester',
     'south',
-#    'django_extensions',
+    #'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (

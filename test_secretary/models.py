@@ -7,10 +7,12 @@ from django.contrib.contenttypes.models import ContentType
 from django_extensions.db.fields import ModificationDateTimeField
 from django.utils.translation import ugettext as _
 
+
 STATUS = (('NT', 'untested'),
           ('OK', 'success'),
           ('NOK', 'failed'),
           ('DN', 'decision needed'))
+
 
 class AdminUrlMixIn():
     def get_admin_url(self):
@@ -55,7 +57,7 @@ class TestSection(models.Model, AdminUrlMixIn):
 
 
 class TestCase(models.Model, AdminUrlMixIn):
-    number = models.PositiveIntegerField(null=True, blank=True)
+    order = models.PositiveIntegerField(null=True, blank=True)
     name = models.CharField(max_length=100)
     section = models.ForeignKey(TestSection)
     active = models.BooleanField(default=True)
@@ -69,7 +71,7 @@ class TestCase(models.Model, AdminUrlMixIn):
 
     class Meta:
         get_latest_by = 'pk'
-        ordering = ('section', 'number', 'name')
+        ordering = ('section', 'order', 'name')
 
 
 class Precondition(models.Model, AdminUrlMixIn):
@@ -139,7 +141,7 @@ class TestCaseRun(models.Model, AdminUrlMixIn):
         return '%s: %s' % (self.testrun, self.testcase)
 
     class Meta:
-        ordering = ('testcase__section__app__name', 'testcase__section__order', 'testcase__section__name', 'testcase__number')
+        ordering = ('testcase__section__app__name', 'testcase__section__order', 'testcase__section__name', 'testcase__order')
         permissions = (
             ("view_testcaserun_status", _("Can see own tests running")),
         )
