@@ -2,8 +2,9 @@
 
 {% load i18n %}
 
-{% block main %}
+{% block title %}{{ app }} - Test Secretary{% endblock %}
 
+{% block main %}
   <h1>{{ app }}</h1>
 
   {% for section in app.active_sections %}
@@ -41,5 +42,4 @@
   {% endfor %}
 
   <a href="{% url 'overview' %}" class="btn btn-info">Overview</a>
-
 {% endblock %}
