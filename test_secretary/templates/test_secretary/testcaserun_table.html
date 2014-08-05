@@ -47,7 +47,7 @@
         </tfoot>-->
         <tbody>
           {% for testcaserun in testcaserun_section.list %}
-            <tr>
+            <tr{% if not testcaserun.testcase.active %} class="text-muted"{% endif %}>
               <td style="width: 3em;">{{ testcaserun.testcase.order }}</td>
               <td style="width: 15%">{{ testcaserun.testcase.name }}</td>
               <td>{{ testcaserun.testcase.description|default:""|linebreaksbr }}</td>
@@ -70,6 +70,7 @@
                         {{ testcaserun.get_status_display }}
                       </span>
                     </a>
+                    {# XXX #}
                     <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'NT' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'NT')" style="margin-top: 0.5em;">
                       Set untested
                     </button>
@@ -88,6 +89,7 @@
                         {{ testcaserun.get_status_display }}
                       </span>
                     </a>
+                    {# XXX #}
                     <button type="button" href="{% url 'set_testcaserun_status' testcaserun.pk 'OK' %}" class="btn btn-default btn-xs shown" onclick="set_testcaserun_status({{ testcaserun.pk }}, 'OK')" style="margin-top: 0.5em;">
                       Set success
                     </button>
