@@ -12,6 +12,7 @@ from django.utils.translation import ugettext as _
 from .models import *
 from .forms import TestCaseRunForm
 from unittester.testrunner import run_tests
+from . import compat
 
 
 logger = logging.Logger('test_secretary#views')
@@ -41,7 +42,12 @@ def app_overview(request, aid):
 @login_required
 @permission_required('test_secretary.view_testruns', raise_exception=True)
 def testrun_overview(request, rid):
-    d = {'counter': itertools.count()}
+    c = itertools.count()
+    if not hasattr(c, '__next__'):
+        c = compat.count()
+
+    d = {'counter': c}
+
     testrun = get_object_or_404(TestRun, pk=rid)
 
     d['testrun'] = testrun
