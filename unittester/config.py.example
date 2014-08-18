@@ -1,0 +1,5 @@
+import os
+
+d = os.path.dirname(__file__)
+
+TESTDIRECTORIES = [os.path.join(d, 'tests')]
