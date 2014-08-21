@@ -1,6 +1,8 @@
-$('.sortable').sortable();
+$('.sortable').sortable({
+    handle: '.handle'
+});
 
 $('.sortable').sortable().bind('sortupdate', function() {
     //Triggered when the user stopped sorting and the DOM position has changed.
-    alert('updated');
+    console.log('updated');
 });

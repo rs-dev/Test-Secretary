@@ -8,17 +8,46 @@
 {% block scripts %}
   <script src="{% static 'js/jquery.sortable.js' %}"></script>
   <script src="{% static 'js/sort_testcases.js' %}"></script>
+  <script>
+    function sort_enable() {
+      $('.sortable').sortable('enable');
+      $('.edit').fadeIn();
+    }
+    function sort_disable() {
+      $('.sortable').sortable('disable');
+      $('.edit').fadeOut();
+    }
+    function sort_toggle(elem) {
+      if(elem.checked) {
+        sort_enable();
+      } else {
+        sort_disable();
+      }
+    }
+    // sorting disable by default
+    $('.sortable').sortable('disable');
+    $('.edit').hide();
+  </script>
 {% endblock %}
 
 {% block main %}
   <div class="header">
     <h1 class="inline">{{ app }}</h1>
     <span class="inline" style="font-size:15px;vertical-align:middle;">
+      Show:
       {% if active %}
-        (<a href="{% url 'app_overview' app.pk 'all' %}">Show deactivated</a>)
+        <a href="{% url 'app_overview' app.pk 'all' %}">
       {% else %}
-        (<a href="{% url 'app_overview' app.pk %}">Hide deactivated</a>)
+        <a href="{% url 'app_overview' app.pk %}">
       {% endif %}
+        <input type="checkbox" class="switch" data-on-text="all" data-off-text="active"
+        {% if not active %}CHECKED{% endif %}>
+      </a>
+    </span>
+    <span class="inline">
+      Sorting:
+      <input type="checkbox" class="switch" data-on-text="on" data-off-text="off"
+      onchange="sort_toggle(this);">
     </span>
   </div>
 
@@ -27,6 +56,7 @@
     {% if section.active_testcases.count %}
       <table class="table table-bordered table-striped">
         <thead>
+          <th class="edit"></th>
           <th>#</th>
           <th>{% trans "Name" %}</th>
           <th>{% trans "Description" %}</th>
@@ -37,6 +67,7 @@
           {% if active %}
             {% for testcase in section.active_testcases %}
               <tr>
+                <td class="edit"><span class="handle">:: </span></td>
                 <td>{{ testcase.order }}</td>
                 <td>{{ testcase.name }}</td>
                 <td>{{ testcase.description|default:"-"|linebreaksbr }}</td>
@@ -47,6 +78,7 @@
           {% else %}
             {% for testcase in section.testcase_set.all %}
               <tr class="{% if not testcase.active %} text-muted{% endif %}">
+                <td class="edit"><span class="handle">:: </span></td>
                 <td>{{ testcase.order }}</td>
                 <td>{{ testcase.name }}</td>
                 <td>{{ testcase.description|default:"-"|linebreaksbr }}</td>
