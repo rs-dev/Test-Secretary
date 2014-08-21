@@ -5,7 +5,16 @@
 {% block title %}{{ app }} - Test Secretary{% endblock %}
 
 {% block main %}
-  <h1>{{ app }}</h1>
+  <div class="header">
+    <h1 class="inline">{{ app }}</h1>
+    <span class="inline" style="font-size:15px;vertical-align:middle;">
+      {% if active %}
+        (<a href="{% url 'app_overview' app.pk 'all' %}">Show deactivated</a>)
+      {% else %}
+        (<a href="{% url 'app_overview' app.pk %}">Hide deactivated</a>)
+      {% endif %}
+    </span>
+  </header>
 
   {% for section in app.active_sections %}
     <h3>{{ section.name }}</h3>
@@ -19,15 +28,27 @@
           <th>{% trans "Expected" %}</th>
         </thead>
         <tbody>
-          {% for testcase in section.active_testcases %}
-            <tr>
-              <td>{{ testcase.order }}</td>
-              <td>{{ testcase.name }}</td>
-              <td>{{ testcase.description|default:"-"|linebreaksbr }}</td>
-              <td>{{ testcase.action|default:"-"|linebreaksbr }}</td>
-              <td>{{ testcase.expected|default:"-"|linebreaksbr }}</td>
-            </tr>
-          {% endfor %}
+          {% if active %}
+            {% for testcase in section.active_testcases %}
+              <tr>
+                <td>{{ testcase.order }}</td>
+                <td>{{ testcase.name }}</td>
+                <td>{{ testcase.description|default:"-"|linebreaksbr }}</td>
+                <td>{{ testcase.action|default:"-"|linebreaksbr }}</td>
+                <td>{{ testcase.expected|default:"-"|linebreaksbr }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            {% for testcase in section.testcase_set.all %}
+              <tr{% if not testcase.active %} class="text-muted"{% endif %}>
+                <td>{{ testcase.order }}</td>
+                <td>{{ testcase.name }}</td>
+                <td>{{ testcase.description|default:"-"|linebreaksbr }}</td>
+                <td>{{ testcase.action|default:"-"|linebreaksbr }}</td>
+                <td>{{ testcase.expected|default:"-"|linebreaksbr }}</td>
+              </tr>
+            {% endfor %}
+          {% endif %}
         </tbody>
       </table>
     {% else %}

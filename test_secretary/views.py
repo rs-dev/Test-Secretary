@@ -32,10 +32,9 @@ def home(request):
     return render(request, 'test_secretary/overview.html', d)
 
 
-def app_overview(request, aid):
-    d = {}
-    app = Application.objects.get(pk=aid)
-    d['app'] = app
+def app_overview(request, aid, all=False):
+    d = {'active': not all}
+    d['app'] = Application.objects.get(pk=aid)
     return render(request, 'test_secretary/app_overview.html', d)
 
 

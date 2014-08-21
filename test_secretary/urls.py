@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     url(r'^testcaserun/edit/(?P<trid>\d+)/(?P<elemno>\d+)/?$', 'test_secretary.views.edit_testcaserun', name='edit_testcaserun_multiple'),
     url(r'^testcaserun/edit/(?P<tcrid>\d+)/?$', 'test_secretary.views.edit_testcaserun_single', name='edit_testcaserun_single'),
     url(r'^testcaserun/setstatus/(?P<tcrid>\d+)/(?P<status>[A-Z]{2,3})/?$', 'test_secretary.views.set_testcaserun_status', name='set_testcaserun_status'),
-    url(r'^app/(?P<aid>\d+)/?$', 'test_secretary.views.app_overview', name='app_overview'),
+    url(r'^app/(?P<aid>\d+)/(?P<all>all)?/?$', 'test_secretary.views.app_overview', name='app_overview'),
 
     url(r'^unittester/', include(unittester.urls, namespace='unittester')),
     url(r'^admin/', include(admin.site.urls)),
