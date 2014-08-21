@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load static %}
 
 {% block title %}{{ app }} - Test Secretary{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/jquery.sortable.js' %}"></script>
+  <script src="{% static 'js/sort_testcases.js' %}"></script>
+{% endblock %}
 
 {% block main %}
   <div class="header">
@@ -14,7 +20,7 @@
         (<a href="{% url 'app_overview' app.pk %}">Hide deactivated</a>)
       {% endif %}
     </span>
-  </header>
+  </div>
 
   {% for section in app.active_sections %}
     <h3>{{ section.name }}</h3>
@@ -27,7 +33,7 @@
           <th>{% trans "Action" %}</th>
           <th>{% trans "Expected" %}</th>
         </thead>
-        <tbody>
+        <tbody class="sortable">
           {% if active %}
             {% for testcase in section.active_testcases %}
               <tr>
@@ -40,7 +46,7 @@
             {% endfor %}
           {% else %}
             {% for testcase in section.testcase_set.all %}
-              <tr{% if not testcase.active %} class="text-muted"{% endif %}>
+              <tr class="{% if not testcase.active %} text-muted{% endif %}">
                 <td>{{ testcase.order }}</td>
                 <td>{{ testcase.name }}</td>
                 <td>{{ testcase.description|default:"-"|linebreaksbr }}</td>
