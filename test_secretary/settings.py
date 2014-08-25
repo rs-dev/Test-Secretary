@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,7 @@ INSTALLED_APPS = (
     'test_secretary',
     'unittester',
     'south',
-    #'django_extensions',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (
