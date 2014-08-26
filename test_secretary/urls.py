@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^app/(?P<aid>\d+)/(?P<all>all)?/?$', 'test_secretary.views.app_overview', name='app_overview'),
 
     url(r'^unittester/', include(unittester.urls, namespace='unittester')),
+    url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="generic_login"),
