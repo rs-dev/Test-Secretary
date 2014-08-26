@@ -33,6 +33,9 @@
 {% block main %}
   <div class="header">
     <h1 class="inline">{{ app }}</h1>
+    <a href="{{ app.get_admin_url }}" target="_blank">
+      <button class="btn btn-primary btn-xs" style="vertical-align:top;">Edit</button>
+    </a>
     <span class="inline" style="font-size:15px;vertical-align:middle;">
       Show:
       {% if active %}
