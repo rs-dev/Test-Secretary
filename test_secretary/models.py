@@ -93,6 +93,12 @@ class TestRun(models.Model, AdminUrlMixIn):
         timestring = self.date.astimezone(tz.tzlocal()).strftime('%Y-%m-%d %H:%M')
         return '[%s] %s' % (timestring, self.name)
 
+    @property
+    def assigned_applications(self):
+        return Application.objects.filter(
+            testsection__testcase__id__in=self.testcaserun_set.values('testcase_id')
+        ).distinct()
+
     class Meta:
         get_latest_by = 'date'
         ordering = ['-date']

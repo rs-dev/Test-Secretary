@@ -37,6 +37,7 @@
           {% for testrun_own in testruns.own %}
             <li>
               <a href="{% url "testrun_overview" testrun_own.pk %}">{{ testrun_own }}</a>
+              ({{ testrun_own.assigned_applications|join:', '}})
               {% if testrun_own.is_finished %}
                 {% if testrun_own.is_success %}
                   <span class="label label-success" title="{% trans 'Tests:' %} {{ testrun_own.success_count }}">success</span>
@@ -59,6 +60,7 @@
             {% for testrun_other in testruns.other %}
               <li>
                 <a href="{% url "testrun_overview" testrun_other.pk %}">{{ testrun_other }}</a>
+                ({{ testrun_other.assigned_applications|join:', '}})
                 {% if perms.test_secretary.view_testcaserun_status %}
                   {% if testrun_other.is_finished %}
                     {% if testrun_other.is_success %}
