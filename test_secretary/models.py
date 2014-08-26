@@ -1,3 +1,4 @@
+from dateutil import tz
 from datetime import datetime
 
 from django.db import models
@@ -89,7 +90,8 @@ class TestRun(models.Model, AdminUrlMixIn):
     user = models.ForeignKey(User)
 
     def __str__(self):
-        return '[%s] %s' % (self.date.strftime('%Y-%m-%d %H:%M'), self.name)
+        timestring = self.date.astimezone(tz.tzlocal()).strftime('%Y-%m-%d %H:%M')
+        return '[%s] %s' % (timestring, self.name)
 
     class Meta:
         get_latest_by = 'date'

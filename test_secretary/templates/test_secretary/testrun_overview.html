@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load tz %}
 
 {% block title %}{{ testrun.name }} - Test Secretary{% endblock %}
 
@@ -18,7 +19,7 @@
       </a>
     {% endif %}
     <p>
-      <span id="testrun-date">{{ testrun.date }}</span>
+      <span id="testrun-date">{{ testrun.date|localtime }}</span>
       <span id="testrun-version">{{ testrun.version }}</span>
     </p>
   </div>
