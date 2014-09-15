@@ -2,7 +2,6 @@ import sys
 import unittest
 import logging
 import importlib
-import json
 
 from celery import shared_task
 
