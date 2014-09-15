@@ -3,5 +3,5 @@ psycopg2
 South>=0.8
 django-grappelli
 celery
-redis
+django-celery
 python-dateutil

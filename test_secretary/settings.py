@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+import platform
+
+devs = ['thinkstation_tester']
+dev_mode = platform.node() in devs
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -20,9 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'wm#%lip)^y=$5r850+g5mbv!nd#5eh8x9+icqe=2vjvn@#1kbn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = dev_mode
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -40,8 +44,12 @@ INSTALLED_APPS = (
     'test_secretary',
     'unittester',
     'south',
-    'django_extensions',
+    'kombu.transport.django',
+    'djcelery',
 )
+
+if dev_mode:
+    INSTALLED_APPS += ('django_extensions',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -89,6 +97,12 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -104,3 +118,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+BROKER_URL = 'django://'
+CELERY_RESULT_BACKEND = 'djcelery.backends.cache:CacheBackend'
+CELERY_IGNORE_RESULT = False
+CELERY_ACCEPT_CONTENT = ['json', 'pickle']
