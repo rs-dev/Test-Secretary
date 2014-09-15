@@ -14,6 +14,7 @@ def run_testcaserun_single(request, tcrid):
          'unittests': unittests
         }
     if request.method == 'POST':
-        run_testcaserun(tcrid)
+        run_testcaserun.delay(tcrid)
+        d['queued'] = True
 
     return render(request, 'unittester/run_testcaserun_single.html', d)
