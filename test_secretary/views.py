@@ -11,7 +11,6 @@ from django.utils.translation import ugettext as _
 
 from .models import *
 from .forms import TestCaseRunForm
-from unittester.testrunner import run_tests
 from . import compat
 
 

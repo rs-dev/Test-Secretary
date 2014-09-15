@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 
 from test_secretary.models import *
 from unittester.models import *
-from unittester.testrunner import run_test
+from unittester.tasks import run_testcaserun
 
 
 def run_testcaserun_single(request, tcrid):
@@ -14,32 +14,6 @@ def run_testcaserun_single(request, tcrid):
          'unittests': unittests
         }
     if request.method == 'POST':
-        test_results = []
-        test_runs = []
-        descriptions = []
-
-        for test in unittests:
-            test_result = run_test(test.test_module)
-            utr = UnitTestRun(unittest=test, testcaserun=testcaserun)
-            errors, failures = test_result.errors, test_result.failures
-            utr.errors = len(errors)
-            utr.failures = len(failures)
-            utr.tests_run = test_result.testsRun
-            description = '\n'.join(map(lambda x: x[1], errors+failures))
-            utr.description = description
-            descriptions.append(description)
-            utr.save()
-            test_results.append(test_result)
-            test_runs.append(utr)
-
-        is_success = all([run.wasSuccessful() for run in test_results])
-        if testcaserun.status == 'NT':
-            testcaserun.status = 'OK' if is_success else 'NOK'
-            if not testcaserun.comment:
-                testcaserun.comment = ('\n'+'='*79+'\n').join(descriptions)
-            testcaserun.save()
-
-        d['test_results'] = test_results
-        d['test_runs'] = test_runs
+        run_testcaserun(tcrid)
 
     return render(request, 'unittester/run_testcaserun_single.html', d)
