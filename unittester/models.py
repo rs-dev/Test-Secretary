@@ -26,3 +26,6 @@ class UnitTestRun(models.Model):
 
     def is_success(self):
         return self.errors+self.failures == 0
+
+    def __str__(self):
+        return "[%s] %s" % (self.date.strftime('%Y-%m-%d %X'), self.unittest.name)
