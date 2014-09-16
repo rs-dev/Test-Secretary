@@ -4,17 +4,17 @@ from django.core.urlresolvers import reverse
 
 from test_secretary.models import *
 from unittester.models import *
-from unittester.tasks import run_testcaserun
+from unittester.tasks import run_testcaserun_tests
 
 
-def run_testcaserun_single(request, tcrid):
+def run_testcaserun(request, tcrid):
     testcaserun = get_object_or_404(TestCaseRun, pk=tcrid)
     unittests = testcaserun.testcase.unittest_set.all()
     d = {'testcaserun': testcaserun,
          'unittests': unittests
         }
     if request.method == 'POST':
-        run_testcaserun.delay(tcrid)
+        run_testcaserun_tests.delay(tcrid)
         d['queued'] = True
 
-    return render(request, 'unittester/run_testcaserun_single.html', d)
+    return render(request, 'unittester/run_testcaserun.html', d)

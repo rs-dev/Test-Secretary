@@ -31,7 +31,7 @@ def run_test(testcase):
 
 
 @shared_task
-def run_testcaserun(tcrid):
+def run_testcaserun_tests(tcrid):
     testcaserun = TestCaseRun.objects.get(pk=tcrid)
     test_results = []
     descriptions = []

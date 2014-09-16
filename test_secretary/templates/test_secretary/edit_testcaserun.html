@@ -48,5 +48,10 @@
 
   {% block bottom %}
     <a href="{% url 'testrun_overview' testcaserun.testrun.pk %}" class="btn btn-info">TestRun</a>
+    {% if testcaserun.testcase.unittest_set.count %}
+      <a href="{% url 'unittester:testcaserun' testcaserun.pk %}" class="btn btn-primary">Automatic tests</a>
+    {% else %}
+      <a href="#" class="btn btn-primary" disabled="disabled">Automatic tests</a>
+    {% endif %}
   {% endblock %}
 {% endblock %}
