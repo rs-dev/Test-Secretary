@@ -67,6 +67,7 @@ def new_testrun(request):
         testcase_ids = [TCREGEX.match(elem).groupdict()['tcid']
                           for elem in request.POST if TCREGEX.match(elem)]
         # get TestCases from ids
+        # XXX using ids should be sufficient
         testcases = [TestCase.objects.get(pk=tcid) for tcid in testcase_ids]
 
         if testcases:
@@ -85,6 +86,28 @@ def new_testrun(request):
     d['apps'] = Application.objects.filter(active=True)
     return render(request, 'test_secretary/new_testrun.html', d)
 
+
+@login_required
+def append_testcases(request, trid):
+    d = {}
+    testrun = get_object_or_404(TestRun, pk=trid)
+    d['testrun'] = testrun
+
+    if request.method == 'POST':
+        testcase_ids = [TCREGEX.match(elem).groupdict()['tcid']
+                          for elem in request.POST if TCREGEX.match(elem)]
+
+        if testcase_ids:
+            logger.info('Append %d TestCases to %s' % (len(testcase_ids), testrun))
+            for testcase_id in testcase_ids:
+                TestCaseRun.objects.create(testrun=testrun,
+                    testcase_id=testcase_id, editor=request.user)
+            return HttpResponseRedirect(reverse('testrun_overview', kwargs={'rid': testrun.pk}))
+        else:
+            d['errmsg'] = 'No testcases selected'
+
+    d['apps'] = Application.objects.filter(active=True)
+    return render(request, 'test_secretary/append_testcases.html', d)
 
 @login_required
 @permission_required('test_secretary.change_testcaserun', raise_exception=True)

@@ -2,10 +2,10 @@
 
 {% load i18n %}
 
-{% block title %}New TestRun - Test Secretary{% endblock %}
+{% block title %}Append TestCases - Test Secretary{% endblock %}
 
 {% block main %}
-  <h1>New TestRun</h1>
+  <h1>Append TestCases</h1>
 
   {% if errmsg %}
     <div class="alert alert-dismissable alert-danger">
@@ -20,7 +20,7 @@
     </div>
   {% endif %}
 
-  <form method='POST' action='{% url "new_testrun" %}' class='form-element'>
+  <form method='POST' action='{% url "append_testcases" testrun.pk %}' class='form-element'>
     {% csrf_token %}
 
     <div class="panel panel-default">
@@ -31,20 +31,20 @@
       </div>
       <div class="panel-body">
         <p>
-          <input name='name' placeholder="Name"></input>
+          <span><strong>Name: </strong>{{ testrun.name }}</span>
         </p>
         <p>
-          <input name='comment' placeholder="Comment"></input>
+          <span><strong>Comment: </strong>{{ testrun.comment }}</span>
         </p>
         <p>
-          <input name='version' size="40" placeholder="Version"></input>
+          <span><strong>Version: </strong>{{ testrun.version }}</span>
         </p>
       </div>
     </div>
 
     {% include 'test_secretary/testcase_panels.html' %}
 
-    <input type='submit' class="btn btn-primary" value='{% trans "Create TestRun" %}'/>
+    <input type='submit' class="btn btn-primary" value='{% trans "Save TestRun" %}'/>
   </form>
 
   <a href="{% url 'overview' %}" class="btn btn-info">Overview</a>

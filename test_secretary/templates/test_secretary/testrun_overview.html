@@ -17,6 +17,9 @@
       <a href="{{ testrun.get_admin_url }}" target="_blank">
         <button class="btn btn-primary btn-xs" style="vertical-align:top;">Edit</button>
       </a>
+      <a href="{% url 'append_testcases' testrun.pk %}">
+        <button class="btn btn-primary btn-xs" style="vertical-align:top;">Add TestCases</button>
+      </a>
     {% endif %}
     <p>
       <span id="testrun-date">{{ testrun.date|localtime }}</span>

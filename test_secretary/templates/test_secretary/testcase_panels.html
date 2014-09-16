@@ -1,0 +1,74 @@
+{% load i18n %}
+{% load testcase_assigned %}
+
+{% block scripts %}
+  <script>
+    function set_testcases(cls, state) {
+      $('input.'+cls).prop("checked", state);
+    }
+  </script>
+{% endblock %}
+
+{% for app in apps %}
+  <div class="panel panel-default" id="appPanel{{ app.pk }}">
+    <div class="panel-heading">
+      <a data-toggle="collapse" data-parent="#appPanelBody{{ app.pk }}" href="#collapseApp{{ app.pk }}">
+        <h3 class="panel-title">
+          <small><span class="glyphicon glyphicon-chevron-down"></span></small>
+          {{ app.name }}
+        </h3>
+      </a>
+    </div>
+    <div id="collapseApp{{ app.pk }}" class="panel-collapse collapse out">
+      <div class="panel-body" id="appPanelBody{{ app.pk }}">
+        {% for section in app.active_sections %}
+          <div class="panel panel-default" id='sectionPanel{{ section.pk }}'>
+            <a data-toggle="collapse" data-parent="#sectionPanelBody{{ section.pk }}" href="#collapseSection{{ section.pk }}">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  <small><span class="glyphicon glyphicon-chevron-down"></span></small>
+                  {{ section.name }}
+                </h3>
+              </div>
+            </a>
+            <div id="collapseSection{{ section.pk }}" class="panel-collapse collapse out">
+              <div class="panel-body" id="sectionPanelBody{{ section.pk }}">
+                <div id="sectionblock{{ section.pk }}">
+                  {% for testcase in section.active_testcases %}
+                    {# XXX #}
+                    {% if not testrun|has_testcase_assigned:testcase %}
+                      <p title='{{ testcase.description }}'>
+                        <input type=checkbox id='testcase{{ testcase.pk }}' name='testcase{{ testcase.pk }}' value='1' class="app{{ app.pk }} section{{ section.pk }}"></input>
+                        <label for='testcase{{ testcase.pk }}'>{{ testcase.name }}</label>
+                      </p>
+                    {% endif %}
+                  {% empty %}
+                    <div class="alert alert-info">
+                      No testcases in section
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="panel-footer">
+              Select
+              <a href='#toggle_section{{ section.pk }}' onClick="set_testcases('section{{ section.pk }}', true);">all</a>
+              /
+              <a href='#toggle_section{{ section.pk }}' onClick="set_testcases('section{{ section.pk }}', false);">none</a>
+            </div>
+          </div>
+        {% empty %}
+          <div class="alert alert-info">
+            No sections in application
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="panel-footer">
+      Select
+      <a href='#toggle_app{{ app.pk }}' onClick="set_testcases('app{{ app.pk }}', true);">all</a>
+      /
+      <a href='#toggle_app{{ app.pk }}' onClick="set_testcases('app{{ app.pk }}', false);">none</a>
+    </div>
+  </div>
+{% endfor %}

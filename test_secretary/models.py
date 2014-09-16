@@ -89,6 +89,11 @@ class TestRun(models.Model, AdminUrlMixIn):
     testcases = models.ManyToManyField(TestCase, through='TestCaseRun')
     user = models.ForeignKey(User)
 
+    def has_testcase_assigned(self, testcase):
+        return TestCaseRun.objects.filter(
+            testrun=self, testcase=testcase
+        ).exists()
+
     def __str__(self):
         timestring = self.date.astimezone(tz.tzlocal()).strftime('%Y-%m-%d %H:%M')
         return '[%s] %s' % (timestring, self.name)
