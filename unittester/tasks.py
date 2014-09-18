@@ -16,11 +16,12 @@ def run_test(testcase):
 
     # TODO unicode removed in py3
     try:
-        u''
+        ucode = unicode
     except NameError as e:
-        logging.error(e)
+        logging.info(e)
+        ucode = str
 
-    if isinstance(testcase, str) or type(testcase) in [str, unicode]:
+    if type(testcase) in [str, ucode]:
         mod, _, klass = testcase.rpartition('.')
         try:
             mod = __import__(mod, fromlist=[klass])
