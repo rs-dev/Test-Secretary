@@ -13,12 +13,20 @@ from test_secretary.models import *
 
 def run_test(testcase):
     sys.path += TESTDIRECTORIES
-    if isinstance(testcase, str):
+
+    # TODO unicode removed in py3
+    try:
+        u''
+    except NameError as e:
+        logging.error(e)
+
+    if isinstance(testcase, str) or type(testcase) in [str, unicode]:
         mod, _, klass = testcase.rpartition('.')
         try:
             mod = __import__(mod, fromlist=[klass])
             testcase = getattr(mod, klass)
-        except (AttributeError, ImportError):
+        except (AttributeError, ImportError) as e:
+            logging.error(e)
             logging.error('No such module:', testcase)
             return None
     elif not isinstance(testcase, unittest.TestCase):
