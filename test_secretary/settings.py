@@ -43,13 +43,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'test_secretary',
     'unittester',
+    'django_extensions',
     'south',
     'kombu.transport.django',
     'djcelery',
 )
-
-if dev_mode:
-    INSTALLED_APPS += ('django_extensions',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
