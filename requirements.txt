@@ -2,6 +2,7 @@ django>=1.6,<1.7
 psycopg2
 South>=0.8
 django-grappelli
+django_extensions
 celery
 django-celery
 python-dateutil
