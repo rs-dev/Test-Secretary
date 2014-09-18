@@ -2,6 +2,7 @@
 __pycache__
 env
 *.png
+*.dot
 /static
 logo.png
 unittester/config.py
