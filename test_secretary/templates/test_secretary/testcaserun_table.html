@@ -8,21 +8,13 @@
 {% for testcaserun_app in testcaseruns_group_app %}
   <div class="break-after avoid-break-inside">
     <h2>
-      {% if testcaserun_app.grouper.order != None %}
-        {{ testcaserun_app.grouper.order }}.
-      {% endif %}
+      {{ testcaserun_app.grouper.order|default:'#' }}.
       {{ testcaserun_app.grouper.name }}
     </h2>
     {% regroup testcaserun_app.list by testcase.section as testcaseruns_group_section %}
     {% for testcaserun_section in testcaseruns_group_section %}
       <h3>
-        {% if testcaserun_section.grouper.order != None %}
-          {% if testcaserun_app.grouper.order == None %}
-            #.{{ testcaserun_section.grouper.order }}
-          {% else %}
-            {{ testcaserun_app.grouper.order }}.{{ testcaserun_section.grouper.order }}
-          {% endif %}
-        {% endif %}
+        {{ testcaserun_app.grouper.order|default:'#' }}.{{ testcaserun_section.grouper.order|default:'#' }}
         {{ testcaserun_section.grouper.name }}
       </h3>
       <table class="table table-bordered table-striped">
@@ -48,7 +40,7 @@
         <tbody>
           {% for testcaserun in testcaserun_section.list %}
             <tr{% if not testcaserun.testcase.active %} class="text-muted"{% endif %}>
-              <td style="width: 3em;">{{ testcaserun.testcase.order }}</td>
+              <td style="width: 3em;">{{ testcaserun.testcase.order|default:'#' }}</td>
               <td style="width: 15%">{{ testcaserun.testcase.name }}</td>
               <td>{{ testcaserun.testcase.description|default:""|linebreaksbr }}</td>
               <td style="width: 15%">
