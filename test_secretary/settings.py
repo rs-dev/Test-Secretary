@@ -49,6 +49,9 @@ INSTALLED_APPS = (
     'djcelery',
 )
 
+if dev_mode:
+    INSTALLED_APPS += ('debug_toolbar',)
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
