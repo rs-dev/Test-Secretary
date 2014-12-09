@@ -149,8 +149,7 @@ def edit_testcaserun(request, trid, elemno):
         testcaserun = testcaseruns[tcr_count-1]
         d['elemno'] = tcr_count-1
 
-    is_last = elemno >= tcr_count-1
-    d['is_last'] = is_last
+    d['is_last'] = elemno >= tcr_count-1
 
     if request.method == 'POST':
         testcaserun_form = TestCaseRunForm(request.POST, instance=testcaserun)

@@ -56,9 +56,10 @@
               <td style="width: 15%">{{ testcaserun.testcase.expected|default:""|linebreaksbr }}</td>
               {% if perms.test_secretary.view_testcaserun_status or testcase.user == user %}
                 <td id="status{{ testcaserun.pk }}" style="width: 6em;" title="{{ testcaserun.comment|default:'' }}">
+                  {% if testcaserun.testcase.autotest_exists %}<span class="label label-primary">Automatic test</span><br>{% endif %}
                   {% if testcaserun.status == 'OK' %}
                     <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
-                      <span class="label label-success">
+                      <span class="label label-success state-label">
                         {{ testcaserun.get_status_display }}
                       </span>
                     </a>
@@ -71,13 +72,13 @@
                     </button>
                   {% elif testcaserun.status == 'NOK' %}
                     <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
-                      <span class="label label-danger">
+                      <span class="label label-danger state-label">
                         {{ testcaserun.get_status_display }}
                       </span>
                     </a>
                   {% elif testcaserun.status == 'NT' %}
                     <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
-                      <span class="label label-default">
+                      <span class="label label-default state-label">
                         {{ testcaserun.get_status_display }}
                       </span>
                     </a>
@@ -90,7 +91,7 @@
                     </button>
                   {% elif testcaserun.status == 'DN' %}
                     <a href="{% url 'edit_testcaserun_multiple' testrun.pk counter|next %}">
-                      <span class="label label-info">
+                      <span class="label label-info state-label">
                         {{ testcaserun.get_status_display }}
                       </span>
                     </a>

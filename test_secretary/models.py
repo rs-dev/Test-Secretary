@@ -18,7 +18,8 @@ STATUS = (('NT', 'untested'),
 class AdminUrlMixIn():
     def get_admin_url(self):
         content_type = ContentType.objects.get_for_model(self.__class__)
-        return urlresolvers.reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.pk,))
+        name = 'admin:%s_%s_change' % (content_type.app_label, content_type.model)
+        return urlresolvers.reverse(name, args=(self.pk,))
 
 
 class Application(models.Model, AdminUrlMixIn):
@@ -30,7 +31,7 @@ class Application(models.Model, AdminUrlMixIn):
         return self.name
 
     class Meta:
-        ordering = ['order', 'name']
+        ordering = ('order', 'name')
 
     @property
     def active_sections(self):
@@ -62,8 +63,10 @@ class TestCase(models.Model, AdminUrlMixIn):
     name = models.CharField(max_length=100)
     section = models.ForeignKey(TestSection)
     active = models.BooleanField(default=True)
+    autotest_exists = models.BooleanField(default=False)
     description = models.TextField(null=True, blank=True)
-    preconditions = models.ManyToManyField('self', through='Precondition', null=True, blank=True, symmetrical=False, related_name='precondition_set')
+    preconditions = models.ManyToManyField('self', through='Precondition',
+        null=True, blank=True, symmetrical=False, related_name='precondition_set')
     action = models.TextField(null=True, blank=True)
     expected = models.TextField(null=True, blank=True)
 
@@ -154,7 +157,8 @@ class TestCaseRun(models.Model, AdminUrlMixIn):
         return '%s: %s' % (self.testrun, self.testcase)
 
     class Meta:
-        ordering = ('testcase__section__app__name', 'testcase__section__order', 'testcase__section__name', 'testcase__order')
+        ordering = ('testcase__section__app__name', 'testcase__section__order',
+            'testcase__section__name', 'testcase__order')
         permissions = (
             ("view_testcaserun_status", _("Can see own tests running")),
         )

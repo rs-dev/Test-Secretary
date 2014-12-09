@@ -40,6 +40,9 @@
                       <p title='{{ testcase.description }}'>
                         <input type=checkbox id='testcase{{ testcase.pk }}' name='testcase{{ testcase.pk }}' value='1' class="app{{ app.pk }} section{{ section.pk }}"></input>
                         <label for='testcase{{ testcase.pk }}'>{{ testcase.name }}</label>
+                        {% if testcase.autotest_exists %}
+                          <span class="label label-primary">Automatic test</span>
+                        {% endif %}
                       </p>
                     {% endif %}
                   {% empty %}

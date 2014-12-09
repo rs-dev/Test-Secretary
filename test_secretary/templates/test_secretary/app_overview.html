@@ -72,7 +72,12 @@
               <tr>
                 <td class="edit"><span class="handle">:: </span></td>
                 <td>{{ testcase.order }}</td>
-                <td>{{ testcase.name }}</td>
+                <td>
+                  {{ testcase.name }}
+                  {% if testcase.autotest_exists %}
+                    <span class="label label-primary">Automatic test</span>
+                  {% endif %}
+                </td>
                 <td>{{ testcase.description|default:"-"|linebreaksbr }}</td>
                 <td>{{ testcase.action|default:"-"|linebreaksbr }}</td>
                 <td>{{ testcase.expected|default:"-"|linebreaksbr }}</td>

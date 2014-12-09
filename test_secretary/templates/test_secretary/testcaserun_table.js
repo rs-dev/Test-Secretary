@@ -4,7 +4,7 @@
         var btn_vis = td.find('button.shown');
         var btn_hid = td.find('button.hidden');
         var href = btn_vis.attr('href');
-        var span = td.find('span');
+        var span = td.find('span.state-label');
         $.get(href, success=function resp(data){
             btn_vis.removeClass('shown');
             btn_vis.addClass('hidden');
