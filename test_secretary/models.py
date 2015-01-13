@@ -18,7 +18,8 @@ STATUS = (('NT', 'untested'),
 class AdminUrlMixIn():
     def get_admin_url(self):
         content_type = ContentType.objects.get_for_model(self.__class__)
-        name = 'admin:%s_%s_change' % (content_type.app_label, content_type.model)
+        name = 'admin:%s_%s_change' % (content_type.app_label,
+                                       content_type.model)
         return urlresolvers.reverse(name, args=(self.pk,))
 
 
@@ -53,8 +54,6 @@ class TestSection(models.Model, AdminUrlMixIn):
 
     class Meta:
         unique_together = ('name', 'app')
-
-    class Meta:
         ordering = ('app', 'order', 'name')
 
 
@@ -66,7 +65,9 @@ class TestCase(models.Model, AdminUrlMixIn):
     autotest_exists = models.BooleanField(default=False)
     description = models.TextField(null=True, blank=True)
     preconditions = models.ManyToManyField('self', through='Precondition',
-        null=True, blank=True, symmetrical=False, related_name='precondition_set')
+                                           null=True, blank=True,
+                                           symmetrical=False,
+                                           related_name='precondition_set')
     action = models.TextField(null=True, blank=True)
     expected = models.TextField(null=True, blank=True)
 
@@ -98,14 +99,15 @@ class TestRun(models.Model, AdminUrlMixIn):
         ).exists()
 
     def __str__(self):
-        timestring = self.date.astimezone(tz.tzlocal()).strftime('%Y-%m-%d %H:%M')
+        t = self.date.astimezone(tz.tzlocal())
+        timestring = t.strftime('%Y-%m-%d %H:%M')
         return '[%s] %s' % (timestring, self.name)
 
     @property
     def assigned_applications(self):
+        testcase_ids = self.testcaserun_set.values('testcase_id')
         return Application.objects.filter(
-            testsection__testcase__id__in=self.testcaserun_set.values('testcase_id')
-        ).distinct()
+            testsection__testcase__id__in=testcase_ids).distinct()
 
     class Meta:
         get_latest_by = 'date'
@@ -158,7 +160,7 @@ class TestCaseRun(models.Model, AdminUrlMixIn):
 
     class Meta:
         ordering = ('testcase__section__app__name', 'testcase__section__order',
-            'testcase__section__name', 'testcase__order')
+                    'testcase__section__name', 'testcase__order')
         permissions = (
             ("view_testcaserun_status", _("Can see own tests running")),
         )

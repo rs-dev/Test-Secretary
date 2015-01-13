@@ -1,11 +1,9 @@
 import sys
 import unittest
 import logging
-import importlib
 
 from celery import shared_task
 
-from test_secretary import settings
 from .config import TESTDIRECTORIES
 from .models import *
 from test_secretary.models import *
@@ -31,7 +29,8 @@ def run_test(testcase):
             logging.error('No such module:', testcase)
             return None
     elif not isinstance(testcase, unittest.TestCase):
-        logging.error('Given test case neither String nor unittest.TestCase:', testcase)
+        logging.error('Given test case neither String nor unittest.TestCase:',
+                      testcase)
         return None
 
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(testcase)

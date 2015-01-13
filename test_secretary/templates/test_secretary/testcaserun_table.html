@@ -3,6 +3,7 @@
 
 {% include 'test_secretary/testcaserun_table.js' %}
 
+{# XXX generates huge amount of queries #}
 {% regroup testcaseruns by testcase.section.app as testcaseruns_group_app %}
 
 {% for testcaserun_app in testcaseruns_group_app %}
@@ -44,7 +45,7 @@
               <td style="width: 15%">{{ testcaserun.testcase.name }}</td>
               <td>{{ testcaserun.testcase.description|default:""|linebreaksbr }}</td>
               <td style="width: 15%">
-                {% if testcaserun.testcase.preconditions.count %}
+                {% if testcaserun.testcase.preconditions.exists %}
                   <ul>
                     {% for precondition in testcaserun.testcase.preconditions.all %}
                       <li><a href"#{{ precondition.pk }}">{{ precondition.name }}</a></li>

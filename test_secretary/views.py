@@ -1,18 +1,19 @@
 import re
 import logging
 import itertools
-from datetime import datetime, date
+from datetime import datetime
 
 from django.shortcuts import render, get_object_or_404
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
-from django.utils.translation import ugettext as _
 
 from .models import *
 from .forms import TestCaseRunForm
 from . import compat
 
+
+TCREGEX = re.compile('testcase(?P<tcid>\d+)')
 
 logger = logging.Logger('test_secretary#views')
 
@@ -54,18 +55,17 @@ def testrun_overview(request, rid):
     return render(request, 'test_secretary/testrun_overview.html', d)
 
 
-TCREGEX = re.compile('testcase(?P<tcid>\d+)')
-
 @login_required
 @permission_required('test_secretary.add_testrun', raise_exception=True)
 def new_testrun(request):
     d = {}
     if request.method == 'POST':
-        name = request.POST.get('name', 'TestRun %s'% datetime.now().strftime('%c'))
+        tstr = datetime.now().strftime('%c')
+        name = request.POST.get('name', 'TestRun %s' % tstr)
         comment = request.POST.get('comment', None)
         version = request.POST.get('version', 'undefined')
         testcase_ids = [TCREGEX.match(elem).groupdict()['tcid']
-                          for elem in request.POST if TCREGEX.match(elem)]
+                        for elem in request.POST if TCREGEX.match(elem)]
         # get TestCases from ids
         # XXX using ids should be sufficient
         testcases = [TestCase.objects.get(pk=tcid) for tcid in testcase_ids]
@@ -79,7 +79,8 @@ def new_testrun(request):
                 tcr = TestCaseRun(testcase=testcase, testrun=testrun,
                                   editor=request.user)
                 tcr.save()
-            return HttpResponseRedirect(reverse('testrun_overview', kwargs={'rid': testrun.pk}))
+            return HttpResponseRedirect(reverse('testrun_overview',
+                                        kwargs={'rid': testrun.pk}))
         else:
             d['errmsg'] = 'No testcases selected'
 
@@ -95,19 +96,23 @@ def append_testcases(request, trid):
 
     if request.method == 'POST':
         testcase_ids = [TCREGEX.match(elem).groupdict()['tcid']
-                          for elem in request.POST if TCREGEX.match(elem)]
+                        for elem in request.POST if TCREGEX.match(elem)]
 
         if testcase_ids:
-            logger.info('Append %d TestCases to %s' % (len(testcase_ids), testrun))
+            logger.info('Append %d TestCases to %s' % (len(testcase_ids),
+                                                       testrun))
             for testcase_id in testcase_ids:
                 TestCaseRun.objects.create(testrun=testrun,
-                    testcase_id=testcase_id, editor=request.user)
-            return HttpResponseRedirect(reverse('testrun_overview', kwargs={'rid': testrun.pk}))
+                                           testcase_id=testcase_id,
+                                           editor=request.user)
+            return HttpResponseRedirect(reverse('testrun_overview',
+                                        kwargs={'rid': testrun.pk}))
         else:
             d['errmsg'] = 'No testcases selected'
 
     d['apps'] = Application.objects.filter(active=True)
     return render(request, 'test_secretary/append_testcases.html', d)
+
 
 @login_required
 @permission_required('test_secretary.change_testcaserun', raise_exception=True)

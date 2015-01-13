@@ -1,6 +1,4 @@
 from django.shortcuts import render, get_object_or_404
-from django.http.response import HttpResponseRedirect, HttpResponse
-from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
 from test_secretary.models import *
@@ -14,7 +12,7 @@ def run_testcaserun(request, tcrid):
     unittests = testcaserun.testcase.unittest_set.all()
     d = {'testcaserun': testcaserun,
          'unittests': unittests
-        }
+         }
     if request.method == 'POST':
         run_testcaserun_tests.delay(tcrid)
         d['queued'] = True

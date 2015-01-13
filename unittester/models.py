@@ -2,6 +2,7 @@ from django.db import models
 
 from test_secretary.models import TestCase, TestCaseRun
 
+
 class UnitTest(models.Model):
     test_module = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255, null=True, blank=True)
@@ -28,4 +29,5 @@ class UnitTestRun(models.Model):
         return self.errors+self.failures == 0
 
     def __str__(self):
-        return "[%s] %s" % (self.date.strftime('%Y-%m-%d %X'), self.unittest.name)
+        return "[%s] %s" % (self.date.strftime('%Y-%m-%d %X'),
+                            self.unittest.name)

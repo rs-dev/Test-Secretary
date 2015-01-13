@@ -2,25 +2,26 @@ import os
 import csv
 from optparse import make_option
 
-from django.core.management.base import BaseCommand, CommandError
-from django.db.utils import IntegrityError
+from django.core.management.base import BaseCommand
 
 from test_secretary.models import *
+
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--legacy',
-            action='store_true',
-            dest='legacy',
-            default=False,
-            help='Use legacy syntax for doc csv extraction'),
+                    action='store_true',
+                    dest='legacy',
+                    default=False,
+                    help='Use legacy syntax for doc csv extraction')
     )
     args = '<csv file names>'
     help = 'Import testcases from csv'
 
     def _preprocess(self, testcase):
         processed = {}
-        #;testcase;description;pre-condition;input-data;expected-behavior;actual-behavior
+        # ;testcase;description;pre-condition;input-data;
+        # expected-behavior;actual-behavior
         mapping = (('pre-condition', 'precondition_comment'),
                    ('#', 'number'), ('testcase', 'name'),
                    ('description', 'description'),
@@ -42,9 +43,11 @@ class Command(BaseCommand):
             if cr:
                 print('Create new app "%s"' % appname)
 
-            section, cr = TestSection.objects.get_or_create(name=sectionname, app=app)
+            section, cr = TestSection.objects.get_or_create(name=sectionname,
+                                                            app=app)
             if cr:
-                print('Create new section "%s" for app "%s"' % (sectionname, appname))
+                print('Create new section "%s" for app "%s"' % (sectionname,
+                                                                appname))
 
             with open(fn) as f:
                 for testcase in csv.DictReader(f, delimiter=';'):
@@ -56,18 +59,22 @@ class Command(BaseCommand):
                         preconditions = testcase['preconditions'].split(',')
                     testcase.pop('preconditions', None)
 
-                    tcs = TestCase.objects.filter(section=section, name=testcase['name'])
+                    tcs = TestCase.objects.filter(section=section,
+                                                  name=testcase['name'])
                     if tcs.count() == 0:
-                        tc = TestCase.objects.create(section=section, active=True, **testcase)
+                        tc = TestCase.objects.create(section=section,
+                                                     active=True, **testcase)
                         print('Create Testcase: %s' % tc.name)
                     elif tcs.count() == 1:
                         tc = tcs[0]
                     else:
-                        print('Found multiple testcases with same name in section:', tcs)
+                        print('Found multiple testcases '
+                              'with same name in section:', tcs)
                         print('Take first testcase')
                         tc = tcs[0]
 
                     for precondition in preconditions:
                         if precondition.isdigit():
-                            tp = TestCase.objects.get(number=precondition, section=section)
+                            tp = TestCase.objects.get(number=precondition,
+                                                      section=section)
                             tc.preconditions.add(tp)
